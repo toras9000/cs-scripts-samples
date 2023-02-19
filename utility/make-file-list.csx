@@ -1,5 +1,5 @@
 #nullable enable
-#r "nuget: Lestaly, 0.28.0"
+#r "nuget: Lestaly, 0.31.0"
 using System.Reflection;
 using System.Text.RegularExpressions;
 using CommandLine;
@@ -52,9 +52,9 @@ return await Paved.RunAsync(async () =>
         .ToArray();
 
     // Output File Information
-    var outDir = options.OutDir.IsWhite() ? ThisSource.GetRelativeDirectory(".") : new DirectoryInfo(options.OutDir);
+    var outDir = ThisSource.RelativeDirectory(options.OutDir);
     var saveExt = options.FormatExcel ? "xlsx" : "csv";
-    var saveFile = outDir.GetRelativeFile($"files-{DateTime.Now:yyyyMMdd_HHmmss}.{saveExt}");
+    var saveFile = outDir.RelativeFile($"files-{DateTime.Now:yyyyMMdd_HHmmss}.{saveExt}");
 
     // Filter output members (columns)
     var memberFilter = (MemberInfo member) => member.Name switch
