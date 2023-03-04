@@ -1,6 +1,6 @@
 #nullable enable
 #r "nuget: Docker.Registry.DotNet, 1.2.1"
-#r "nuget: Lestaly, 0.31.0"
+#r "nuget: Lestaly, 0.32.0"
 using Lestaly;
 using Docker.Registry.DotNet;
 using Docker.Registry.DotNet.Authentication;
