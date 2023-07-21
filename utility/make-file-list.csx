@@ -43,7 +43,7 @@ return await Paved.RunAsync(async () =>
 
     // If the search target is unspecified, let the user enter it.
     var path = options.Target
-        .WhenWhite(() => ConsoleWig.ReadLine("Search directory:\n>"))
+        .WhenWhite(() => ConsoleWig.Write("Search directory:\n>").ReadLine())
         .WhenWhite(() => throw new OperationCanceledException());
 
     // Exclusion list

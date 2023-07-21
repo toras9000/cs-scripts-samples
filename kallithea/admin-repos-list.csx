@@ -35,8 +35,7 @@ await Paved.RunAsync(configuration: o => o.AnyPause(), action: async () =>
     using var outenc = ConsoleWig.OutputEncodingPeriod(Encoding.UTF8);
 
     // Handle cancel key press
-    using var signal = new CancellationTokenSource();
-    using var handler = ConsoleWig.CancelKeyHandlePeriod(signal);
+    using var signal = ConsoleWig.CreateCancelKeyHandlePeriod();
 
     // Show access address
     Console.WriteLine($"Server API entry : {settings.KallitheaApiEntry}");
@@ -52,7 +51,7 @@ await Paved.RunAsync(configuration: o => o.AnyPause(), action: async () =>
     else
     {
         // If it is not there, have them input it.
-        apiAccess = new ApiAccessInfo(settings.KallitheaApiEntry.AbsoluteUri, ConsoleWig.ReadLine("Input API key\n>"));
+        apiAccess = new ApiAccessInfo(settings.KallitheaApiEntry.AbsoluteUri, ConsoleWig.Write("Input API key\n>").ReadLine());
     }
 
     // Obtaining repo information via API.

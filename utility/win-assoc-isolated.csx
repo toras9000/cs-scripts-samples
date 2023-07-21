@@ -38,5 +38,5 @@ return await Paved.RunAsync(configuration: o => o.AnyPause(), action: async () =
     assocKey.SetValue(null, @"""%ProgramFiles%\dotnet\dotnet.exe"" script --isolated-load-context ""%1"" -- %*", RegistryValueKind.ExpandString);
 
     // Output of normal completion.
-    ConsoleWig.WriteLineColord(ConsoleColor.Green, "The registry has been updated.");
+    ConsoleWig.WriteLineColored(ConsoleColor.Green, "The registry has been updated.");
 });

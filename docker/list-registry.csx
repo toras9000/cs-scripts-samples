@@ -16,8 +16,7 @@ var settings = new
 return await Paved.RunAsync(configuration: o => o.PauseOnExit = true, action: async () =>
 {
     // Handle cancel key press
-    using var canceller = new CancellationTokenSource();
-    using var handler = ConsoleWig.CancelKeyHandlePeriod(canceller);
+    using var signal = ConsoleWig.CreateCancelKeyHandlePeriod();
 
     // Generate anonymous access client for target registry
     Console.WriteLine($"Registry: {settings.Url}");
@@ -26,14 +25,14 @@ return await Paved.RunAsync(configuration: o => o.PauseOnExit = true, action: as
     using var client = config.CreateClient(authenticator);
 
     // Retrieve Image Catalog
-    var catalog = await client.Catalog.GetCatalogAsync(parameters: null, canceller.Token);
+    var catalog = await client.Catalog.GetCatalogAsync(parameters: null, signal.Token);
 
     // Process each image in the catalog
     Console.WriteLine("Images:");
     foreach (var repo in catalog.Repositories)
     {
         // Get image tag list
-        var tagsResult = await client.Tags.ListImageTagsAsync(repo, parameters: null, canceller.Token);
+        var tagsResult = await client.Tags.ListImageTagsAsync(repo, parameters: null, signal.Token);
 
         // Process each tag
         foreach (var tag in tagsResult.Tags)
@@ -42,7 +41,7 @@ return await Paved.RunAsync(configuration: o => o.PauseOnExit = true, action: as
             Console.WriteLine($"  {repo}:{tag}");
 
             // Get tag manifest
-            var tagManifest = await client.Manifest.GetManifestAsync(repo, tag, canceller.Token);
+            var tagManifest = await client.Manifest.GetManifestAsync(repo, tag, signal.Token);
 
             // Make additional information for the manifest
             static string imageInfo(ImageManifest manifest) => manifest switch
@@ -57,7 +56,7 @@ return await Paved.RunAsync(configuration: o => o.PauseOnExit = true, action: as
                 case ManifestList list:
                     foreach (var item in list.Manifests)
                     {
-                        var itemManifest = await client.Manifest.GetManifestAsync(repo, item.Digest, canceller.Token);
+                        var itemManifest = await client.Manifest.GetManifestAsync(repo, item.Digest, signal.Token);
                         var archName = new[] { item.Platform.Os, item.Platform.Architecture, item.Platform.Variant, }.DropWhite().JoinString("/");
                         Console.WriteLine($"    Arch={archName}{", ".TieIn(imageInfo(itemManifest.Manifest))}");
                     }
