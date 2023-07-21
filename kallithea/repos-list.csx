@@ -33,20 +33,20 @@ await Paved.RunAsync(configuration: o => o.AnyPause(), action: async () =>
     // Attempt to recover saved API key information.
     var info = await ApiKeyStore.RestoreAsync(settings.ApiEntry, signal.Token);
 
-    // Obtaining user information via API.
-    Console.WriteLine($"Get users info.");
+    // Obtaining repo information via API.
+    Console.WriteLine($"Get repos info.");
     using var client = new SimpleKallitheaClient(settings.ApiEntry, info.Key.Token);
-    var users = await client.GetUsersAsync(signal.Token);
+    var repos = await client.GetReposAsync(signal.Token);
 
     // If API access is successful, scramble and save the API key.
     await info.SaveAsync(signal.Token);
 
     // Saving options. Exclude some properties.
     var options = new SaveToCsvOptions();
-    options.MemberFilter = m => m.Name switch { nameof(UserInfo.emails) => false, _ => true };
+    options.MemberFilter = m => m.Name switch { nameof(RepoInfo.last_changeset) => false, nameof(RepoInfo.landing_rev) => false, _ => true };
 
     // Save to csv.
     Console.WriteLine($"Save to csv.");
-    var usersFile = ThisSource.RelativeFile($"users_{DateTime.Now:yyyyMMdd_HHmmss}.csv");
-    await users.SaveToCsvAsync(usersFile, options);
+    var reposFile = ThisSource.RelativeFile($"repos_{DateTime.Now:yyyyMMdd_HHmmss}.csv");
+    await repos.SaveToCsvAsync(reposFile, options);
 });
