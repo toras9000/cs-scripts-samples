@@ -18,6 +18,8 @@ var settings = new
         new("Lestaly",                "0.42.0"),
         new("Docker.Registry.DotNet", "1.2.1"),
         new("KallitheaApiClient",     "0.7.0.11"),
+        new("BookStackApiClient",     "23.6.1"),
+        new("SkiaSharp",              "2.88.3"),
     },
 };
 
