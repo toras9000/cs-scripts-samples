@@ -1,5 +1,5 @@
 #nullable enable
-#r "nuget: Lestaly, 0.32.0"
+#r "nuget: Lestaly, 0.42.0"
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Microsoft.Win32;

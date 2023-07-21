@@ -3,7 +3,7 @@
 // $ dotnet tool install -g dotnet-script
 
 #r "nuget: KallitheaApiClient, 0.7.0.11"
-#r "nuget: Lestaly, 0.32.0"
+#r "nuget: Lestaly, 0.42.0"
 using System.Text.RegularExpressions;
 using System.Threading;
 using KallitheaApiClient;
