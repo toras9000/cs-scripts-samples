@@ -10,7 +10,7 @@ using Lestaly;
 var settings = new
 {
     // Search directory for script files
-    TargetDir = "../",
+    TargetDir = ThisSource.RelativeDirectory("../"),
 
     // Packages and versions to be unified and updated
     Packages = new PackageVersion[]
@@ -34,13 +34,10 @@ return await Paved.RunAsync(configuration: o => o.AnyPause(), action: async () =
     // Dictionary of packages to be updated
     var versions = settings.Packages.ToDictionary(p => p.Name);
 
-    // Updated target directory
-    var targetDir = new DirectoryInfo(settings.TargetDir);
-
     // Search for scripts under the target directory
-    foreach (var file in targetDir.EnumerateFiles("*.csx", SearchOption.AllDirectories))
+    foreach (var file in settings.TargetDir.EnumerateFiles("*.csx", SearchOption.AllDirectories))
     {
-        Console.WriteLine($"{file.RelativePathFrom(targetDir, ignoreCase: true)}");
+        Console.WriteLine($"{file.RelativePathFrom(settings.TargetDir, ignoreCase: true)}");
 
         // Read file contents
         var lines = await file.ReadAllLinesAsync();
