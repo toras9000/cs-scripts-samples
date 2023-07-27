@@ -20,6 +20,7 @@ var settings = new
         new("KallitheaApiClient",          "0.7.0.16"),
         new("BookStackApiClient",          "23.6.1"),
         new("SkiaSharp",                   "2.88.3"),
+        new("MSystem.Data.SQLite.Core",    "1.0.118"),
     },
 };
 
