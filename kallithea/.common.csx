@@ -1,5 +1,5 @@
 #r "nuget: KallitheaApiClient, 0.7.0.16"
-#r "nuget: Lestaly, 0.42.0"
+#r "nuget: Lestaly, 0.43.0"
 #nullable enable
 using System.Threading;
 using Lestaly;
