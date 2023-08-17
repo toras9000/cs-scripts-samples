@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.43.0"
+#r "nuget: Lestaly, 0.45.0"
 #nullable enable
 using System.Text.RegularExpressions;
 using Lestaly;
@@ -15,10 +15,8 @@ var settings = new
     // Packages and versions to be unified and updated
     Packages = new PackageVersion[]
     {
-        new("Lestaly",                     "0.43.0"),
+        new("Lestaly",                     "0.45.0"),
         new("Docker.Registry.DotNet",      "1.2.1"),
-        new("KallitheaApiClient",          "0.7.0.16"),
-        new("BookStackApiClient",          "23.6.1"),
         new("SkiaSharp",                   "2.88.3"),
         new("MSystem.Data.SQLite.Core",    "1.0.118"),
     },
@@ -27,7 +25,7 @@ var settings = new
 // Package version information data type
 record PackageVersion(string Name, string Version);
 
-return await Paved.RunAsync(configuration: o => o.AnyPause(), action: async () =>
+return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
 {
     // Detection regular expression for package reference directives
     var detector = new Regex(@"^\s*#\s*r\s+""\s*nuget\s*:\s*([a-zA-Z0-9_\-\.]+)(?:,| )\s*(\d+)([0-9\-\.]+)?\s*""");

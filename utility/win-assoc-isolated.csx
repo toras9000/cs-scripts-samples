@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.43.0"
+#r "nuget: Lestaly, 0.45.0"
 #nullable enable
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
@@ -8,7 +8,7 @@ using Lestaly;
 // Add a isolated assembly load context option for dotnet-script associations on Windows.
 // It is assumed to be run in the presence of an association entry created by `dotnet-script register`.
 
-return await Paved.RunAsync(configuration: o => o.AnyPause(), action: async () =>
+return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
 {
     // dummy
     await Task.CompletedTask;
