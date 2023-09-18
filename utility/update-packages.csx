@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.45.0"
+#r "nuget: Lestaly, 0.47.0"
 #nullable enable
 using System.Text.RegularExpressions;
 using Lestaly;
@@ -15,10 +15,10 @@ var settings = new
     // Packages and versions to be unified and updated
     Packages = new PackageVersion[]
     {
-        new("Lestaly",                     "0.45.0"),
+        new("Lestaly",                     "0.47.0"),
         new("Docker.Registry.DotNet",      "1.2.1"),
-        new("SkiaSharp",                   "2.88.3"),
-        new("MSystem.Data.SQLite.Core",    "1.0.118"),
+        new("SkiaSharp",                   "2.88.5"),
+        new("System.Data.SQLite.Core",     "1.0.118"),
     },
 };
 
