@@ -22,6 +22,8 @@ var settings = new
         new("System.Data.SQLite.Core",               "1.0.118"),
         new("Npgsql.EntityFrameworkCore.PostgreSQL", "8.0.0"),
         new("Microsoft.EntityFrameworkCore.Sqlite",  "8.0.1"),
+        new("ClosedXML",                             "0.104.0-preview2"),
+        new("Kokuban",                               "0.2.0"),
     },
 };
 
