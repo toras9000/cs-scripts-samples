@@ -15,11 +15,13 @@ var settings = new
     // Packages and versions to be unified and updated
     Packages = new PackageVersion[]
     {
-        new("Lestaly",                     "0.56.0"),
-        new("Docker.Registry.DotNet",      "1.2.1"),
-        new("SkiaSharp",                   "2.88.7"),
-        new("System.Data.SQLite.Core",     "1.0.118"),
-        new("MQTTnet",                     "4.3.3.952"),
+        new("Lestaly",                               "0.56.0"),
+        new("Docker.Registry.DotNet",                "1.2.1"),
+        new("SkiaSharp",                             "2.88.7"),
+        new("MQTTnet",                               "4.3.3.952"),
+        new("System.Data.SQLite.Core",               "1.0.118"),
+        new("Npgsql.EntityFrameworkCore.PostgreSQL", "8.0.0"),
+        new("Microsoft.EntityFrameworkCore.Sqlite",  "8.0.1"),
     },
 };
 
