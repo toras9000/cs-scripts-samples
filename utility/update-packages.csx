@@ -1,5 +1,6 @@
 #r "nuget: Lestaly, 0.56.0"
 #nullable enable
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using Lestaly;
 
@@ -28,12 +29,46 @@ var settings = new
 };
 
 // Package version information data type
-record PackageVersion(string Name, string Version);
+record PackageVersion(string Name, string Version)
+{
+    public SemanticVersion SemanticVersion { get; } = new SemanticVersion(Version);
+}
+
+// Data type for version value management
+record SemanticVersion
+{
+    public SemanticVersion(string version)
+    {
+        var match = VersionPattern.Match(version);
+        if (!match.Success) throw new ArgumentException("Illegal");
+        this.Major = int.Parse(match.Groups["major"].Value);
+        this.Minor = int.Parse(match.Groups["subver"].Captures[0].Value);
+        this.Patch = int.TryParse(match.Groups["subver"].Captures.ElementAtOrDefault(1)?.Value, out var patch) ? patch : default;
+        this.Filum = int.TryParse(match.Groups["subver"].Captures.ElementAtOrDefault(2)?.Value, out var filum) ? filum : default;
+        this.PreRelease = match.Groups["pre"].Value;
+        this.Build = match.Groups["build"].Value;
+    }
+
+    public int Major { get; }
+    public int Minor { get; }
+    public int? Patch { get; }
+    public int? Filum { get; }
+    public string PreRelease { get; }
+    public string Build { get; }
+
+    public static bool TryParse(string text, [NotNullWhen(true)] out SemanticVersion? version)
+    {
+        try { version = new SemanticVersion(text); return true; }
+        catch { version = default; return false; }
+    }
+
+    private static readonly Regex VersionPattern = new(@"^(?<major>\d+)(?:\.(?<subver>\d+)){1,3}(?:\-(?<pre>.+))?(?:\+(?<build>.+))?$");
+}
 
 return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
 {
     // Detection regular expression for package reference directives
-    var detector = new Regex(@"^\s*#\s*r\s+""\s*nuget\s*:\s*([a-zA-Z0-9_\-\.]+)(?:,| )\s*(\d+)([0-9\-\.]+)?\s*""");
+    var detector = new Regex(@"^\s*#\s*r\s+""\s*nuget\s*:\s*([a-zA-Z0-9_\-\.]+)(?:,| )\s*(.+)\s*""");
 
     // Dictionary of packages to be updated
     var versions = settings.Packages.ToDictionary(p => p.Name);
@@ -63,17 +98,22 @@ return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
                 continue;
             }
 
+            // Parse the version number.
+            if (!SemanticVersion.TryParse(match.Groups[2].Value, out var pkgVer))
+            {
+                Console.WriteLine($"  Skip: Unable to recognize version number");
+                continue;
+            }
+
             // Determine if the package version needs to be updated.
-            var pkgVer = match.Groups[2].Value + match.Groups[3].Value;
-            if (pkgVer == package.Version)
+            if (pkgVer == package.SemanticVersion)
             {
                 Console.WriteLine($"  Skip: {pkgName} - Already in version");
                 continue;
             }
 
             // Create a replacement line for the reference directive
-            var additional = line[(match.Index + match.Length)..];
-            var newLine = @$"#r ""nuget: {pkgName}, {package.Version}""{additional}";
+            var newLine = @$"#r ""nuget: {pkgName}, {package.Version}""";
             lines[i] = newLine;
 
             // set a flag that there is an update
