@@ -1,0 +1,17 @@
+to dn.subtree="ou=users,dc=myserver,o=home"
+	by dn.base="uid=configurator,ou=users,dc=myserver,o=home" read
+	by * auth
+
+to dn.subtree="ou=accounts,dc=myserver,o=home"
+	attrs=sn,givenName,userPassword,mail
+	by self write
+	by dn.base="uid=configurator,ou=users,dc=myserver,o=home" manage
+	by * read
+
+to dn.subtree="ou=accounts,dc=myserver,o=home"
+	by self read
+	by dn.base="uid=configurator,ou=users,dc=myserver,o=home" manage
+	by * auth
+
+to * by * read
+

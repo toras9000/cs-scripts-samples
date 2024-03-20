@@ -4,11 +4,10 @@
 #r "nuget: Kokuban, 0.2.0"
 #load ".directory-service-extensions.csx"
 #nullable enable
-using Lestaly;
-using Kokuban;
-using CommandLine;
 using System.DirectoryServices.Protocols;
 using System.Net;
+using Kokuban;
+using Lestaly;
 
 var settings = new
 {
@@ -28,7 +27,7 @@ var settings = new
         ProtocolVersion = 3,
 
         // Bind user credential, null is anonymous
-        BindCredential = new NetworkCredential("uid=configurator,ou=users,dc=myserver,o=home", "configurator-pass"),
+        BindCredential = new NetworkCredential("uid=authenticator,ou=users,dc=myserver,o=home", "authenticator-pass"),
     },
 
     // Search option

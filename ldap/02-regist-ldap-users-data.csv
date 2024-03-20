@@ -1,0 +1,3 @@
+ID,UserName,SurName,GivenName,DisplayName,Mail
+3001,tester,generic,tester,Tester,tester@example.com
+3002,debugger,generic,debugger,Debugger,debugger@example.com
