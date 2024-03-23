@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.57.0"
+#r "nuget: Lestaly, 0.58.0"
 #r "nuget: System.Data.SQLite.Core, 1.0.118"
 #nullable enable
 using System.Data;
