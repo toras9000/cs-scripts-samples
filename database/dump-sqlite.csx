@@ -72,13 +72,22 @@ return await Paved.RunAsync(async () =>
                 }
                 writer.WriteLine();
 
+                // Local function for Quote if need
+                static string? csvField(object? value)
+                {
+                    var str = value?.ToString();
+                    if (str == null) return default;
+                    if (str.IndexOfAny([',', '"']) < 0) return str;
+                    return str.Quote();
+                }
+
                 // Output records
                 while (reader.Read())
                 {
                     for (var i = 0; i < reader.FieldCount; i++)
                     {
                         if (i != 0) writer.Write(',');
-                        writer.Write(reader.GetValue(i));
+                        writer.Write(csvField(reader.GetValue(i)));
                     }
                     writer.WriteLine();
                 }
