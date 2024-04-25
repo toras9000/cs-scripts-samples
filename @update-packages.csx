@@ -20,11 +20,11 @@ var settings = new
     {
         new("Lestaly",                               "0.58.0"),
         new("Docker.Registry.DotNet",                "1.2.1"),
-        new("SkiaSharp",                             "2.88.7"),
+        new("SkiaSharp",                             "2.88.8"),
         new("MQTTnet",                               "4.3.3.952"),
         new("System.Data.SQLite.Core",               "1.0.118"),
         new("Npgsql.EntityFrameworkCore.PostgreSQL", "8.0.2"),
-        new("Microsoft.EntityFrameworkCore.Sqlite",  "8.0.2"),
+        new("Microsoft.EntityFrameworkCore.Sqlite",  "8.0.4"),
         new("ClosedXML",                             "0.104.0-preview2"),
         new("Kokuban",                               "0.2.0"),
         new("System.DirectoryServices",              "8.0.0"),
