@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.58.0"
+#r "nuget: Lestaly, 0.61.0"
 #nullable enable
 using System.Text.RegularExpressions;
 using Lestaly;
@@ -29,7 +29,7 @@ public static IEnumerable<UserEntry> ReadUserListCsv(this FileInfo self)
             if (fields.Length < minFields) throw new PavedMessageException("unexpected format");
 
             var idx = 0;
-            var id = fields[idx++].TryParseInt32();
+            var id = fields[idx++].TryParseNumber<int>();
             var username = fields[idx++];
             var surname = fields[idx++];
             var givenname = fields[idx++];

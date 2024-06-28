@@ -1,10 +1,9 @@
-#r "nuget: Lestaly, 0.58.0"
+#r "nuget: Lestaly, 0.61.0"
 #r "nuget: System.Data.SQLite.Core, 1.0.118"
 #nullable enable
 using System.Data;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using CommandLine;
 using Lestaly;
 using System.Data.SQLite;
 

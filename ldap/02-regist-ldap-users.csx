@@ -1,6 +1,6 @@
 #r "nuget: System.DirectoryServices, 8.0.0"
 #r "nuget: System.DirectoryServices.Protocols, 8.0.0"
-#r "nuget: Lestaly, 0.58.0"
+#r "nuget: Lestaly, 0.61.0"
 #r "nuget: Kokuban, 0.2.0"
 #load ".directory-service-extensions.csx"
 #load ".text-helper.csx"
@@ -166,7 +166,7 @@ static async ValueTask<LdapUserEntry[]> SearchUsersAsync(this LdapConnection sel
         if (entry.EnumerateAttributeValues("objectClass").Intersect(expectClasses).Count() != expectClasses.Length) throw new PavedMessageException("Unexpected objectClass");
 
         //  Retrieving User Information
-        var number = entry.GetAttributeSingleValue("uidNumber")?.ParseInt32() ?? throw new PavedMessageException("Unexpected uidNumber");
+        var number = entry.GetAttributeSingleValue("uidNumber")?.TryParseNumber<int>() ?? throw new PavedMessageException("Unexpected uidNumber");
         var username = entry.GetAttributeSingleValue("uid") ?? throw new PavedMessageException("Unexpected uid");
         var surname = entry.GetAttributeSingleValue("sn") ?? throw new PavedMessageException("Unexpected sn");
         var givenname = entry.GetAttributeSingleValue("givenName") ?? throw new PavedMessageException("Unexpected givenName");

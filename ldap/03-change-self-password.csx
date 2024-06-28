@@ -1,6 +1,6 @@
 #r "nuget: System.DirectoryServices, 8.0.0"
 #r "nuget: System.DirectoryServices.Protocols, 8.0.0"
-#r "nuget: Lestaly, 0.58.0"
+#r "nuget: Lestaly, 0.61.0"
 #r "nuget: Kokuban, 0.2.0"
 #load ".directory-service-extensions.csx"
 #load ".text-helper.csx"

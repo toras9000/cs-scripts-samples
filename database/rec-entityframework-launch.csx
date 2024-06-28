@@ -1,5 +1,5 @@
 #r "nuget: ProcessX, 1.5.5"
-#r "nuget: Lestaly, 0.58.0"
+#r "nuget: Lestaly, 0.61.0"
 using Zx;
 using Lestaly;
 

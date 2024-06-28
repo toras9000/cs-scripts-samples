@@ -1,46 +1,44 @@
-#r "nuget: Lestaly, 0.58.0"
+#r "nuget: Lestaly, 0.61.0"
+#r "nuget: Cocona.Lite, 2.2.0"
 #nullable enable
 using System.Reflection;
 using System.Text.RegularExpressions;
-using CommandLine;
+using Cocona;
 using Lestaly;
 
 // Command line argument mapping type
-class Options
+class Options : ICommandParameterSet
 {
-    [Value(0, HelpText = "Search target directory")]
+    [Argument(Order = 0), Option(Description = "Search target directory"), HasDefaultValue]
     public string? Target { get; set; }
 
-    [Option('o', "outdir", HelpText = "Output directory.")]
+    [Option("outdir", ['o'], Description = "Output directory."), HasDefaultValue]
     public string? OutDir { get; set; }
 
-    [Option('e', "excludes", HelpText = "Exclusion patterns from search. (regex)", Separator = ':', Default = new[] { "^.git", "^.hg", "^.svn" })]
-    public IEnumerable<string?>? ExcludePatterns { get; set; }
+    [Option("excludes", ['e'], Description = "Exclusion patterns from search. (regex)"), HasDefaultValue]
+    public string[] ExcludePatterns { get; set; } = ["^.git", "^.hg", "^.svn"];
 
-    [Option('f', "fullname", HelpText = "Flag to output full path.")]
+    [Option("fullname", ['f'], Description = "Flag to output full path.")]
     public bool FullName { get; set; }
 
-    [Option('t', "with-time", HelpText = "Flag to output timestamps.")]
+    [Option("excel", ['l'], Description = "Flag to output as Excel file.")]
+    public bool FormatExcel { get; set; }
+
+    [Option('t', Description = "Flag to output timestamps.")]
     public bool WithTime { get; set; }
 
-    [Option('x', "with-ext", HelpText = "Flag to output extension.")]
+    [Option('x', Description = "Flag to output extension.")]
     public bool WithExt { get; set; }
 
-    [Option('s', "with-size", HelpText = "Flag to output size.")]
+    [Option('s', Description = "Flag to output size.")]
     public bool WithSize { get; set; }
-
-    [Option('l', "excel", HelpText = "Flag to output as Excel file.")]
-    public bool FormatExcel { get; set; }
 }
 
 // Data type for information collection and output
 record FileItem(string Path, string Extension, DateTime LastWrite, long Size);
 
-return await Paved.RunAsync(async () =>
+await CoconaLiteApp.RunAsync(args: Args.ToArray(), commandBody: async (Options options) =>
 {
-    // Argument parsing
-    var options = CliArgs.Parse<Options>(Args);
-
     // If the search target is unspecified, let the user enter it.
     var path = options.Target
         .WhenWhite(() => ConsoleWig.Write("Search directory:\n>").ReadLine())
@@ -71,7 +69,7 @@ return await Paved.RunAsync(async () =>
         {
             var file = c.File!;
             var path = options.FullName ? file!.FullName : file.RelativePathFrom(dir, ignoreCase: true);
-            var time = options.WithTime ? file.LastAccessTime : default(DateTime);
+            var time = options.WithTime ? file.LastAccessTime : default;
             var ext = options.WithExt ? file.Extension : "";
             var size = options.WithSize ? file.Length : 0L;
             return new FileItem(path, ext, time, size);
