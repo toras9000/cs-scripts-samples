@@ -1,10 +1,12 @@
 #r "nuget: MQTTnet, 4.3.6.1152"
-#r "nuget: Lestaly, 0.61.0"
+#r "nuget: Lestaly, 0.65.0"
+#r "nuget: Kokuban, 0.2.0"
 #nullable enable
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using Lestaly;
+using Kokuban;
 using MQTTnet;
 using MQTTnet.Client;
 
@@ -35,18 +37,18 @@ return await Paved.RunAsync(async () =>
         .Build();
 
     // Context information
-    ConsoleWig.WriteLine("Context information");
-    ConsoleWig.WriteLine($"  Broker   : {settings.BrokerHost}:{settings.BrokerPort}");
-    ConsoleWig.WriteLine($"  ClientId : {settings.ClientId}");
-    ConsoleWig.WriteLine($"  PubTopic : {settings.PublishTopic}");
-    ConsoleWig.WriteLine($"  SubTopic : {settings.SubscribeTopic}");
+    WriteLine("Context information");
+    WriteLine($"  Broker   : {settings.BrokerHost}:{settings.BrokerPort}");
+    WriteLine($"  ClientId : {settings.ClientId}");
+    WriteLine($"  PubTopic : {settings.PublishTopic}");
+    WriteLine($"  SubTopic : {settings.SubscribeTopic}");
 
     // Create client
     var factory = new MqttFactory();
     using var client = factory.CreateMqttClient();
 
     // Connect to broker
-    ConsoleWig.WriteLine("Connecting to a broker");
+    WriteLine("Connecting to a broker");
     var connResult = await client.ConnectAsync(clientOptinos);
 
     // Start subscribe task
@@ -58,22 +60,24 @@ return await Paved.RunAsync(async () =>
         if (recv.ReasonCode == MqttApplicationMessageReceivedReasonCode.Success)
         {
             var msg = recv.ApplicationMessage;
-            ConsoleWig.WriteLineColored(ConsoleColor.DarkGray, $"\n{msg.Topic}: {msg.ConvertPayloadToString()}");
+            WriteLine(Chalk.Gray[$"\n{msg.Topic}: {msg.ConvertPayloadToString()}"]);
         }
         else
         {
-            ConsoleWig.WriteLineColored(ConsoleColor.DarkGray, $"\n[WARN] {recv.ReasonCode}: {recv.ResponseReasonString}");
+            WriteLine(Chalk.Gray[$"\n[WARN] {recv.ReasonCode}: {recv.ResponseReasonString}"]);
         }
-        if (pending) ConsoleWig.Write("...");
-        ConsoleWig.Write(">");
+        if (pending) Write("...");
+        Write(">");
         await Task.CompletedTask;
     };
 
     // Publish messages. 
-    ConsoleWig.WriteLine().WriteLine("Publish the input message.");
+    WriteLine();
+    WriteLine("Publish the input message.");
     while (true)
     {
-        var message = ConsoleWig.Write(">").ReadLine();
+        Write(">");
+        var message = ReadLine();
         if (message.IsEmpty()) continue;
         await client.PublishStringAsync(settings.PublishTopic, message, cancellationToken: signal.Token);
     }

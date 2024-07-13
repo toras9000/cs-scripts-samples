@@ -1,5 +1,5 @@
 #r "nuget: Docker.Registry.DotNet, 1.2.1"
-#r "nuget: Lestaly, 0.61.0"
+#r "nuget: Lestaly, 0.65.0"
 #nullable enable
 using Lestaly;
 using Docker.Registry.DotNet;
@@ -19,7 +19,7 @@ return await Paved.RunAsync(config: o => o.PauseOnExit = true, action: async () 
     using var signal = ConsoleWig.CreateCancelKeyHandlePeriod();
 
     // Generate anonymous access client for target registry
-    Console.WriteLine($"Registry: {settings.Url}");
+    WriteLine($"Registry: {settings.Url}");
     var config = new RegistryClientConfiguration(settings.Url);
     var authenticator = new AnonymousOAuthAuthenticationProvider();
     using var client = config.CreateClient(authenticator);
@@ -28,7 +28,7 @@ return await Paved.RunAsync(config: o => o.PauseOnExit = true, action: async () 
     var catalog = await client.Catalog.GetCatalogAsync(parameters: null, signal.Token);
 
     // Process each image in the catalog
-    Console.WriteLine("Images:");
+    WriteLine("Images:");
     foreach (var repo in catalog.Repositories)
     {
         // Get image tag list
@@ -38,7 +38,7 @@ return await Paved.RunAsync(config: o => o.PauseOnExit = true, action: async () 
         foreach (var tag in tagsResult.Tags)
         {
             // Image/Tag name
-            Console.WriteLine($"  {repo}:{tag}");
+            WriteLine($"  {repo}:{tag}");
 
             // Get tag manifest
             var tagManifest = await client.Manifest.GetManifestAsync(repo, tag, signal.Token);
@@ -58,12 +58,12 @@ return await Paved.RunAsync(config: o => o.PauseOnExit = true, action: async () 
                     {
                         var itemManifest = await client.Manifest.GetManifestAsync(repo, item.Digest, signal.Token);
                         var archName = new[] { item.Platform.Os, item.Platform.Architecture, item.Platform.Variant, }.DropWhite().JoinString("/");
-                        Console.WriteLine($"    Arch={archName}{", ".TieIn(imageInfo(itemManifest.Manifest))}");
+                        WriteLine($"    Arch={archName}{", ".TieIn(imageInfo(itemManifest.Manifest))}");
                     }
                     break;
 
                 default:
-                    Console.WriteLine($"    Arch=(unknown){", ".TieIn(imageInfo(tagManifest.Manifest))}");
+                    WriteLine($"    Arch=(unknown){", ".TieIn(imageInfo(tagManifest.Manifest))}");
                     break;
             }
         }

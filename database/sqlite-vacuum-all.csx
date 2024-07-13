@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.61.0"
+#r "nuget: Lestaly, 0.65.0"
 #r "nuget: System.Data.SQLite.Core, 1.0.118"
 #r "nuget: Dapper, 2.1.35"
 #r "nuget: Kokuban, 0.2.0"
@@ -15,9 +15,9 @@ return await Paved.RunAsync(config: c => c.AnyPause(), action: async () =>
     using var signal = ConsoleWig.CreateCancelKeyHandlePeriod();
 
     // Enter scan path
-    ConsoleWig.WriteLine();
-    ConsoleWig.WriteLine("input scan directory");
-    var input = ConsoleWig.Write(">").ReadLine().Unquote();
+    WriteLine();
+    WriteLine("input scan directory"); Write(">");
+    var input = ReadLine()?.Unquote();
     if (input.IsWhite()) return;
 
     var dbExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase);

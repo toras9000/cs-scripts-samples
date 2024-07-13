@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.61.0"
+#r "nuget: Lestaly, 0.65.0"
 using System.Net.Http;
 using System.Net.Http.Json;
 using Lestaly;

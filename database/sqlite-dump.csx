@@ -1,11 +1,13 @@
-#r "nuget: Lestaly, 0.61.0"
+#r "nuget: Lestaly, 0.65.0"
 #r "nuget: System.Data.SQLite.Core, 1.0.118"
+#r "nuget: Kokuban, 0.2.0"
 #nullable enable
 using System.Data;
+using System.Data.SQLite;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Kokuban;
 using Lestaly;
-using System.Data.SQLite;
 
 return await Paved.RunAsync(async () =>
 {
@@ -16,16 +18,16 @@ return await Paved.RunAsync(async () =>
     while (true)
     {
         // Enter database path
-        ConsoleWig.WriteLine();
-        ConsoleWig.WriteLine("input SQLite database file path.(drag&drop)");
-        var input = await ConsoleWig.Write(">").ReadKeysLineIfAsync(t => t.Unquote().EndsWithAny(new[] { ".db", ".sqlite", }));
+        WriteLine();
+        WriteLine("input SQLite database file path.(drag&drop)"); Write(">");
+        var input = (await ConsoleWig.ReadKeysLineIfAsync(t => t.Unquote().EndsWithAny([".db", ".sqlite"]))).Unquote();
         if (input.IsWhite()) break;
 
         // Existence check of the specified file
         var dbFile = CurrentDir.RelativeFile(input.Unquote());
         if (!dbFile.Exists)
         {
-            Console.WriteLine($"Not found '{dbFile.FullName}'");
+            WriteLine($"Not found '{dbFile.FullName}'");
             continue;
         }
 
@@ -94,7 +96,7 @@ return await Paved.RunAsync(async () =>
         }
         catch (Exception ex)
         {
-            ConsoleWig.WriteLineColored(ConsoleColor.Red, ex.Message);
+            WriteLine(Chalk.Red[ex.Message]);
         }
     }
 

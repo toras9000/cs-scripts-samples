@@ -1,6 +1,6 @@
 #r "nuget: System.DirectoryServices, 8.0.0"
 #r "nuget: System.DirectoryServices.Protocols, 8.0.0"
-#r "nuget: Lestaly, 0.61.0"
+#r "nuget: Lestaly, 0.65.0"
 #r "nuget: Kokuban, 0.2.0"
 #load ".directory-service-extensions.csx"
 #nullable enable
@@ -86,11 +86,12 @@ return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
     }
 
     // Search for input.
-    ConsoleWig.NewLine().WriteLine("Input search filter");
+    WriteLine(); WriteLine("Input search filter");
     while (true)
     {
         // Read input.
-        var input = ConsoleWig.Write(">").ReadLine();
+        Write(">");
+        var input = ReadLine();
         if (input.IsWhite()) break;
 
         // Interpret scopes and filters.

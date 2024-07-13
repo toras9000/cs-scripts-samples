@@ -1,8 +1,10 @@
-#r "nuget: Lestaly, 0.61.0"
+#r "nuget: Lestaly, 0.65.0"
+#r "nuget: Kokuban, 0.2.0"
 #nullable enable
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Microsoft.Win32;
+using Kokuban;
 using Lestaly;
 
 // Add a isolated assembly load context option for dotnet-script associations on Windows.
@@ -38,5 +40,5 @@ return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
     assocKey.SetValue(null, @"""%ProgramFiles%\dotnet\dotnet.exe"" script --isolated-load-context ""%1"" -- %*", RegistryValueKind.ExpandString);
 
     // Output of normal completion.
-    ConsoleWig.WriteLineColored(ConsoleColor.Green, "The registry has been updated.");
+    WriteLine(Chalk.Green["The registry has been updated."]);
 });

@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.61.0"
+#r "nuget: Lestaly, 0.65.0"
 #nullable enable
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
@@ -21,11 +21,11 @@ return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
 {
     using var signal = ConsoleWig.CreateCancelKeyHandlePeriod();
 
-    ConsoleWig.WriteLine("Generate key file");
+    WriteLine("Generate key file");
     using var key = RSA.Create();
     await settings.GenerateKeyFile.WithDirectoryCreate().WriteAllTextAsync(key.ExportPkcs8PrivateKeyPem());
 
-    ConsoleWig.WriteLine("Generate csr file");
+    WriteLine("Generate csr file");
     var subjects = new X500DistinguishedName(settings.CsrSubjects);
     var req = new CertificateRequest(subjects, key, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
     await settings.GenerateCsrFile.WithDirectoryCreate().WriteAllTextAsync(req.CreateSigningRequestPem());

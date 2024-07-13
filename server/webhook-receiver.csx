@@ -1,5 +1,6 @@
 #r "sdk:Microsoft.NET.Sdk.Web"
-#r "nuget: Lestaly, 0.61.0"
+#r "nuget: Lestaly, 0.65.0"
+#r "nuget: Kokuban, 0.2.0"
 #nullable enable
 using System.IO;
 using System.Net.Http;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Logging.Console;
+using Kokuban;
 using Lestaly;
 
 var settings = new
@@ -41,14 +43,14 @@ await Paved.RunAsync(async () =>
 
     // Display URL to set up in BookStack.
     // This will be by the hostname added to the included docker container.
-    Console.WriteLine($"Endpoint address:");
-    Console.WriteLine($"    http://{settings.ServerName}:{settings.PortNumber}/{settings.EndpointName}");
+    WriteLine($"Endpoint address:");
+    WriteLine($"    http://{settings.ServerName}:{settings.PortNumber}/{settings.EndpointName}");
     if (settings.DumpJsonEnabled)
     {
-        Console.WriteLine($"Dump directory:");
-        Console.WriteLine($"    {settings.DumpJsonOutput.FullName}");
+        WriteLine($"Dump directory:");
+        WriteLine($"    {settings.DumpJsonOutput.FullName}");
     }
-    Console.WriteLine();
+    WriteLine();
 
     // Formatting options for outputting JSON.
     var jsonOpt = new JsonSerializerOptions();
@@ -69,7 +71,8 @@ await Paved.RunAsync(async () =>
             var body = await request.ReadFromJsonAsync<JsonElement>();
             var json = JsonSerializer.Serialize(body, jsonOpt);
             var showJson = (0 < settings.MaxJsonOutputLength) ? json.EllipsisByLength(settings.MaxJsonOutputLength, "...") : json;
-            ConsoleWig.WriteLineColored(ConsoleColor.Green, $"{DateTime.Now}: Endpoint={request.Path}, JSON received.").WriteLine(showJson);
+            WriteLine(Chalk.Green[$"{DateTime.Now}: Endpoint={request.Path}, JSON received."]);
+            WriteLine(showJson);
             if (settings.DumpJsonEnabled)
             {
                 try
@@ -79,24 +82,24 @@ await Paved.RunAsync(async () =>
                 }
                 catch
                 {
-                    ConsoleWig.WriteLineColored(ConsoleColor.Yellow, $"{DateTime.Now}: Failed to dump.");
+                    WriteLine(Chalk.Yellow[$"{DateTime.Now}: Failed to dump."]);
                 }
             }
         }
         catch
         {
-            ConsoleWig.WriteLineColored(ConsoleColor.Yellow, $"{DateTime.Now}: Endpoint={request.Path}, Not JSON.");
+            WriteLine(Chalk.Yellow[$"{DateTime.Now}: Endpoint={request.Path}, Not JSON."]);
         }
 
         return Results.Ok();
     });
     server.MapFallback((HttpRequest request) =>
     {
-        ConsoleWig.WriteLineColored(ConsoleColor.DarkGray, $"{DateTime.Now}: Ignore request, Method={request.Method}, Path={request.Path}");
+        WriteLine(Chalk.Gray[$"{DateTime.Now}: Ignore request, Method={request.Method}, Path={request.Path}"]);
         return Results.NotFound();
     });
 
     // Start HTTP Server
-    Console.WriteLine($"Start HTTP service.");
+    WriteLine($"Start HTTP service.");
     await server.RunAsync($"http://*:{settings.PortNumber}");
 });

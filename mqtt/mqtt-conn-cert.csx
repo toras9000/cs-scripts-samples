@@ -1,5 +1,5 @@
 #r "nuget: MQTTnet, 4.3.6.1152"
-#r "nuget: Lestaly, 0.61.0"
+#r "nuget: Lestaly, 0.65.0"
 #nullable enable
 using System.Net;
 using System.Net.Security;
@@ -30,7 +30,7 @@ return await Paved.RunAsync(async () =>
 {
     using var signal = ConsoleWig.CreateCancelKeyHandlePeriod();
 
-    ConsoleWig.WriteLine("Preparing to connect");
+    WriteLine("Preparing to connect");
 
     // Load certs
     // Temporary cert and Export/Reload are to avoid the following errors by Windows : 'Authentication failed because the platform does not support ephemeral keys.'
@@ -58,24 +58,25 @@ return await Paved.RunAsync(async () =>
         .Build();
 
     // Context information
-    ConsoleWig.WriteLine("Context information");
-    ConsoleWig.WriteLine($"  Broker       : {settings.BrokerHost}:{settings.BrokerPort}");
-    ConsoleWig.WriteLine($"  ClientId     : {settings.ClientId}");
-    ConsoleWig.WriteLine($"  PublishTopic : {settings.PublishTopic}");
+    WriteLine("Context information");
+    WriteLine($"  Broker       : {settings.BrokerHost}:{settings.BrokerPort}");
+    WriteLine($"  ClientId     : {settings.ClientId}");
+    WriteLine($"  PublishTopic : {settings.PublishTopic}");
 
     // Create client
     var factory = new MqttFactory();
     using var client = factory.CreateMqttClient();
 
     // Connect to broker
-    ConsoleWig.WriteLine("Connecting to a broker");
+    WriteLine("Connecting to a broker");
     var connResult = await client.ConnectAsync(clientOptinos);
 
     // Publish messages. 
-    ConsoleWig.WriteLine().WriteLine("Publish the input message.");
+    WriteLine(); WriteLine("Publish the input message.");
     while (true)
     {
-        var message = ConsoleWig.Write(">").ReadLine();
+        Write(">");
+        var message = ReadLine();
         if (message.IsEmpty()) continue;
         await client.PublishStringAsync(settings.PublishTopic, message, cancellationToken: signal.Token);
     }
