@@ -1,5 +1,5 @@
 #r "nuget: MQTTnet, 4.3.6.1152"
-#r "nuget: Lestaly, 0.65.0"
+#r "nuget: Lestaly, 0.67.0"
 #r "nuget: Kokuban, 0.2.0"
 #nullable enable
 using System.Net;

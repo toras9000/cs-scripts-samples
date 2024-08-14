@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.65.0"
+#r "nuget: Lestaly, 0.67.0"
 #load ".console-utils.csx"
 #nullable enable
 using System.Net.Sockets;
