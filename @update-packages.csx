@@ -22,6 +22,7 @@ var settings = new
         new("Docker.Registry.DotNet",                "1.2.1"),
         new("SkiaSharp",                             "2.88.8"),
         new("MQTTnet",                               "4.3.6.1152"),
+        new("AngleSharp",                            "1.1.2"),
         new("System.Data.SQLite.Core",               "1.0.118"),
         new("Npgsql.EntityFrameworkCore.PostgreSQL", "8.0.4"),
         new("Microsoft.EntityFrameworkCore.Sqlite",  "8.0.7"),
