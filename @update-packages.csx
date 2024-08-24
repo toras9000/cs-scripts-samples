@@ -19,7 +19,7 @@ var settings = new
     Packages = new PackageVersion[]
     {
         new("Lestaly",                               "0.67.0"),
-        new("Docker.Registry.DotNet",                "1.2.1"),
+        new("Docker.Registry.DotNet",                "2.0.0"),
         new("SkiaSharp",                             "2.88.8"),
         new("MQTTnet",                               "4.3.6.1152"),
         new("AngleSharp",                            "1.1.2"),
