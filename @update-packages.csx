@@ -28,6 +28,7 @@ var settings = new
         new("Microsoft.EntityFrameworkCore.Sqlite",  "8.0.8"),
         new("ClosedXML",                             "0.104.0-preview2"),
         new("Kokuban",                               "0.2.0"),
+        new("WebSerializer",                         "1.3.0"),
         new("System.DirectoryServices",              "8.0.0"),
         new("System.DirectoryServices.Protocols",    "8.0.0"),
     },
