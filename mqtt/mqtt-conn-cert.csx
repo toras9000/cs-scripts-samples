@@ -36,7 +36,7 @@ return await Paved.RunAsync(async () =>
     // Temporary cert and Export/Reload are to avoid the following errors by Windows : 'Authentication failed because the platform does not support ephemeral keys.'
     using var caCert = X509Certificate2.CreateFromPem(await settings.CaCert.ReadAllTextAsync());
     using var clientCertTemp = X509Certificate2.CreateFromPemFile(settings.ClientCert.FullName, settings.ClientKey.FullName);
-    using var clientCert = new X509Certificate2(clientCertTemp.Export(X509ContentType.Pkcs12));
+    using var clientCert = X509CertificateLoader.LoadPkcs12(clientCertTemp.Export(X509ContentType.Pkcs12), "");
 
     // TLS options
     var tlsOptions = new MqttClientTlsOptionsBuilder()
