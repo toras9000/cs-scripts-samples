@@ -1,5 +1,5 @@
-#r "nuget: System.DirectoryServices, 8.0.0"
-#r "nuget: System.DirectoryServices.Protocols, 8.0.0"
+#r "nuget: System.DirectoryServices, 9.0.0"
+#r "nuget: System.DirectoryServices.Protocols, 9.0.0"
 #nullable enable
 using System.DirectoryServices.Protocols;
 

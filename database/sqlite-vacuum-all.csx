@@ -1,5 +1,5 @@
-#r "nuget: Lestaly, 0.68.0"
-#r "nuget: System.Data.SQLite.Core, 1.0.118"
+#r "nuget: Lestaly, 0.69.0"
+#r "nuget: System.Data.SQLite.Core, 1.0.119"
 #r "nuget: Dapper, 2.1.35"
 #r "nuget: Kokuban, 0.2.0"
 #nullable enable
