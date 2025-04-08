@@ -1,6 +1,5 @@
-#r "nuget: Lestaly, 0.69.0"
+#r "nuget: Lestaly, 0.73.0"
 #r "nuget: Kokuban, 0.2.0"
-#load ".directory-service-extensions.csx"
 #load ".text-helper.csx"
 #nullable enable
 using System.DirectoryServices.Protocols;
@@ -52,20 +51,10 @@ return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
     ldap.Credential = settings.Server.BindCredential;
     ldap.Bind();
 
-    // Create a search request.
-    WriteLine("Request a search");
-    var searchReq = new SearchRequest();
-    searchReq.DistinguishedName = settings.Server.ConfigDn;
-    searchReq.Scope = SearchScope.Base;
-
-    // Request a search.
-    var searchRsp = await ldap.SendRequestAsync(searchReq);
-    if (searchRsp.ResultCode != 0) throw new PavedMessageException($"failed to search: {searchRsp.ErrorMessage}");
-    var searchResult = searchRsp as SearchResponse ?? throw new PavedMessageException("unexpected result");
-
     // Read the existing access definition.
-    var configEntry = searchResult.Entries[0];
-    var accessExists = configEntry.EnumerateAttributeValues("olcAccess").ToArray();
+    WriteLine("Request a search");
+    var configEntry = await ldap.GetEntryAsync(settings.Server.ConfigDn) ?? throw new PavedMessageException("unexpected result");
+    var accessExists = configEntry.EnumerateAttributeValues("olcAccess").OfType<string>().ToArray();
 
     // Definitions that already exist shall be excluded from the addition.
     WriteLine("Detecting changes in access");

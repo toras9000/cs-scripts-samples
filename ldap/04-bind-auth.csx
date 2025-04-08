@@ -1,6 +1,5 @@
-#r "nuget: Lestaly, 0.69.0"
+#r "nuget: Lestaly, 0.73.0"
 #r "nuget: Kokuban, 0.2.0"
-#load ".directory-service-extensions.csx"
 #load ".text-helper.csx"
 #nullable enable
 using System.DirectoryServices.Protocols;
@@ -25,7 +24,6 @@ var settings = new
         // LDAP protocol version
         ProtocolVersion = 3,
     },
-
 };
 
 return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>

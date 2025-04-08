@@ -1,8 +1,7 @@
-#r "nuget: System.DirectoryServices, 9.0.0"
-#r "nuget: System.DirectoryServices.Protocols, 9.0.0"
-#r "nuget: Lestaly, 0.69.0"
+#r "nuget: System.DirectoryServices, 9.0.3"
+#r "nuget: System.DirectoryServices.Protocols, 9.0.3"
+#r "nuget: Lestaly, 0.73.0"
 #r "nuget: Kokuban, 0.2.0"
-#load ".directory-service-extensions.csx"
 #load ".text-helper.csx"
 #nullable enable
 using System.DirectoryServices.Protocols;
@@ -72,13 +71,7 @@ return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
             ldap.Credential = new NetworkCredential(userDn, password);
 
             // Perform a search request.
-            var searchReq = new SearchRequest();
-            searchReq.DistinguishedName = userDn;
-            searchReq.Scope = SearchScope.Base;
-            var searchRsp = await ldap.SendRequestAsync(searchReq);
-            if (searchRsp.ResultCode != 0) throw new PavedMessageException($"failed to request: code={searchRsp.ResultCode}, msg={searchRsp.ErrorMessage}");
-            var searchResult = searchRsp as SearchResponse ?? throw new PavedMessageException("not expected result");
-            if (searchResult.Entries.Count <= 0) throw new PavedMessageException("not found");
+            _ = await ldap.GetEntryAsync(userDn) ?? throw new PavedMessageException("not found");
 
             WriteLine(Chalk.Green[$"Successful user binding"]);
         }
@@ -117,7 +110,7 @@ return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
             if (newpass == null) throw new PavedMessageException("The change was discontinued because of repeated failures.");
 
             // Hash the password.
-            var encPass = MakePasswordHash_SSHA256(newpass);
+            var encPass = LdapExtensions.MakePasswordHash.SHA256(newpass);
 
             // Create password attribute change information.
             var changePass = new DirectoryAttributeModification();
@@ -142,35 +135,3 @@ return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
     }
 
 });
-
-// Hash the password.
-string MakePasswordHash_SSHA256(string password)
-{
-    // Create a random value salt.
-    var salt = (stackalloc byte[4]);
-    Random.Shared.NextBytes(salt);
-
-    // Check the UTF8 byte sequence length of the password.
-    var encoder = Encoding.UTF8.GetEncoder();
-    var length = encoder.GetByteCount(password, flush: true);
-
-    // Allocate a buffer of the required size. Keep the buffer at least a certain length, as it will be used for base64 conversion later.
-    var needLen = length + salt.Length;
-    var buffer = new byte[Math.Max(needLen, 128)];
-
-    // Store password and salt in buffer
-    var enclen = encoder.GetBytes(password, buffer, flush: true);
-    salt.CopyTo(buffer.AsSpan(enclen));
-
-    // Hash passwords and salt
-    using var hasher = System.Security.Cryptography.SHA256.Create();
-    var hashed = hasher.ComputeHash(buffer, 0, needLen);
-
-    // Base64 encoding of hash values and salt
-    hashed.CopyTo(buffer.AsSpan());
-    salt.CopyTo(buffer.AsSpan(hashed.Length));
-    var encoded = Convert.ToBase64String(buffer, 0, hashed.Length + salt.Length);
-
-    // Create and return marker-added strings
-    return "{SSHA256}" + encoded;
-}

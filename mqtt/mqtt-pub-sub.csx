@@ -1,5 +1,5 @@
-#r "nuget: MQTTnet, 4.3.7.1207"
-#r "nuget: Lestaly, 0.69.0"
+#r "nuget: MQTTnet, 5.0.1.1416"
+#r "nuget: Lestaly, 0.73.0"
 #r "nuget: Kokuban, 0.2.0"
 #nullable enable
 using System.Net;
@@ -8,7 +8,6 @@ using System.Security.Cryptography.X509Certificates;
 using Lestaly;
 using Kokuban;
 using MQTTnet;
-using MQTTnet.Client;
 
 var settings = new
 {
@@ -44,7 +43,7 @@ return await Paved.RunAsync(async () =>
     WriteLine($"  SubTopic : {settings.SubscribeTopic}");
 
     // Create client
-    var factory = new MqttFactory();
+    var factory = new MqttClientFactory();
     using var client = factory.CreateMqttClient();
 
     // Connect to broker

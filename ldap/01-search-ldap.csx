@@ -1,8 +1,7 @@
-#r "nuget: System.DirectoryServices, 9.0.0"
-#r "nuget: System.DirectoryServices.Protocols, 9.0.0"
-#r "nuget: Lestaly, 0.69.0"
+#r "nuget: System.DirectoryServices, 9.0.3"
+#r "nuget: System.DirectoryServices.Protocols, 9.0.3"
+#r "nuget: Lestaly, 0.73.0"
 #r "nuget: Kokuban, 0.2.0"
-#load ".directory-service-extensions.csx"
 #nullable enable
 using System.DirectoryServices.Protocols;
 using System.Net;
@@ -101,13 +100,7 @@ return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
         try
         {
             // Perform a search request.
-            var request = new SearchRequest();
-            request.DistinguishedName = targetDn;
-            request.Scope = scope;
-            request.Filter = filter;
-            var response = await ldap.SendRequestAsync(request);
-            if (response.ResultCode != 0) throw new PavedMessageException($"failed to request, msg={response.ErrorMessage}");
-            var searchResult = response as SearchResponse ?? throw new PavedMessageException("not expected result");
+            var searchResult = await ldap.SearchAsync(targetDn, scope, filter);
 
             // Show results
             if (searchResult.Entries.Count <= 0)

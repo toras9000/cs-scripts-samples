@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.69.0"
+#r "nuget: Lestaly, 0.73.0"
 #r "nuget: Cocona.Lite, 2.2.0"
 #nullable enable
 using Cocona;

@@ -1,8 +1,7 @@
-#r "nuget: System.DirectoryServices, 9.0.0"
-#r "nuget: System.DirectoryServices.Protocols, 9.0.0"
-#r "nuget: Lestaly, 0.69.0"
+#r "nuget: System.DirectoryServices, 9.0.3"
+#r "nuget: System.DirectoryServices.Protocols, 9.0.3"
+#r "nuget: Lestaly, 0.73.0"
 #r "nuget: Kokuban, 0.2.0"
-#load ".directory-service-extensions.csx"
 #load ".text-helper.csx"
 #nullable enable
 using System.DirectoryServices.Protocols;
@@ -166,13 +165,13 @@ static async ValueTask<LdapUserEntry[]> SearchUsersAsync(this LdapConnection sel
         if (entry.EnumerateAttributeValues("objectClass").Intersect(expectClasses).Count() != expectClasses.Length) throw new PavedMessageException("Unexpected objectClass");
 
         //  Retrieving User Information
-        var number = entry.GetAttributeSingleValue("uidNumber")?.TryParseNumber<int>() ?? throw new PavedMessageException("Unexpected uidNumber");
-        var username = entry.GetAttributeSingleValue("uid") ?? throw new PavedMessageException("Unexpected uid");
-        var surname = entry.GetAttributeSingleValue("sn") ?? throw new PavedMessageException("Unexpected sn");
-        var givenname = entry.GetAttributeSingleValue("givenName") ?? throw new PavedMessageException("Unexpected givenName");
-        var dispname = entry.GetAttributeSingleValue("displayName") ?? throw new PavedMessageException("Unexpected displayName");
-        var mail = entry.GetAttributeSingleValue("mail") ?? throw new PavedMessageException("Unexpected mail");
-        var commonname = entry.GetAttributeSingleValue("cn") ?? throw new PavedMessageException("Unexpected cn");
+        var number = entry.GetAttributeFirstValue("uidNumber")?.ToString()?.TryParseNumber<int>() ?? throw new PavedMessageException("Unexpected uidNumber");
+        var username = entry.GetAttributeFirstValue("uid")?.ToString() ?? throw new PavedMessageException("Unexpected uid");
+        var surname = entry.GetAttributeFirstValue("sn")?.ToString() ?? throw new PavedMessageException("Unexpected sn");
+        var givenname = entry.GetAttributeFirstValue("givenName")?.ToString() ?? throw new PavedMessageException("Unexpected givenName");
+        var dispname = entry.GetAttributeFirstValue("displayName")?.ToString() ?? throw new PavedMessageException("Unexpected displayName");
+        var mail = entry.GetAttributeFirstValue("mail")?.ToString() ?? throw new PavedMessageException("Unexpected mail");
+        var commonname = entry.GetAttributeFirstValue("cn")?.ToString() ?? throw new PavedMessageException("Unexpected cn");
 
         // Create and collect user information types.
         var user = new UserEntry(number, username, surname, givenname, dispname, mail);
@@ -181,4 +180,16 @@ static async ValueTask<LdapUserEntry[]> SearchUsersAsync(this LdapConnection sel
     }
 
     return resultList.ToArray();
+}
+
+public static DirectoryAttributeModification AddAttributeReplace(this ModifyRequest self, string name, string value)
+{
+    var attr = new DirectoryAttributeModification();
+    attr.Operation = DirectoryAttributeOperation.Replace;
+    attr.Name = name;
+    attr.Add(value);
+
+    self.Modifications.Add(attr);
+
+    return attr;
 }
