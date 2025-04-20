@@ -1,5 +1,5 @@
 #r "nuget: Kokuban, 0.2.0"
-#r "nuget: Lestaly, 0.73.0"
+#r "nuget: Lestaly, 0.74.0"
 #nullable enable
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
@@ -18,20 +18,20 @@ var settings = new
     // Packages and versions to be unified and updated
     Packages = new PackageVersion[]
     {
-        new("Lestaly",                               "0.73.0"),
+        new("Lestaly",                               "0.74.0"),
         new("Docker.Registry.DotNet",                "2.0.0"),
         new("SkiaSharp",                             "3.116.1"),
         new("MQTTnet",                               "5.0.1.1416"),
-        new("AngleSharp",                            "1.2.0"),
+        new("AngleSharp",                            "1.3.0"),
         new("StreamJsonRpc",                         "2.21.69"),
         new("System.Data.SQLite.Core",               "1.0.119"),
         new("Npgsql.EntityFrameworkCore.PostgreSQL", "9.0.4"),
-        new("Microsoft.EntityFrameworkCore.Sqlite",  "9.0.3"),
+        new("Microsoft.EntityFrameworkCore.Sqlite",  "9.0.4"),
         new("ClosedXML",                             "0.104.2"),
         new("Kokuban",                               "0.2.0"),
         new("WebSerializer",                         "1.3.0"),
-        new("System.DirectoryServices",              "9.0.3"),
-        new("System.DirectoryServices.Protocols",    "9.0.3"),
+        new("System.DirectoryServices",              "9.0.4"),
+        new("System.DirectoryServices.Protocols",    "9.0.4"),
     },
 };
 

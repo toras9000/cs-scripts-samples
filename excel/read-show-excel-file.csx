@@ -1,5 +1,5 @@
 #r "nuget: ClosedXML, 0.104.2"
-#r "nuget: Lestaly, 0.73.0"
+#r "nuget: Lestaly, 0.74.0"
 #r "nuget: Kokuban, 0.2.0"
 using Lestaly;
 using Kokuban;
