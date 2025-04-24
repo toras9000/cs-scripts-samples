@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.74.0"
+#r "nuget: Lestaly, 0.75.0"
 #r "nuget: Cocona.Lite, 2.2.0"
 #nullable enable
 using System.Reflection;

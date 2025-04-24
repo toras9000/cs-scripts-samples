@@ -1,5 +1,5 @@
 #r "nuget: Kokuban, 0.2.0"
-#r "nuget: Lestaly, 0.74.0"
+#r "nuget: Lestaly, 0.75.0"
 #nullable enable
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
@@ -18,7 +18,7 @@ var settings = new
     // Packages and versions to be unified and updated
     Packages = new PackageVersion[]
     {
-        new("Lestaly",                               "0.74.0"),
+        new("Lestaly",                               "0.75.0"),
         new("Docker.Registry.DotNet",                "2.0.0"),
         new("SkiaSharp",                             "3.116.1"),
         new("MQTTnet",                               "5.0.1.1416"),

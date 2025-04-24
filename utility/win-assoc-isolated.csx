@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.74.0"
+#r "nuget: Lestaly, 0.75.0"
 #r "nuget: Kokuban, 0.2.0"
 #nullable enable
 using System.Runtime.InteropServices;

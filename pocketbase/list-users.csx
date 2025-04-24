@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.74.0"
+#r "nuget: Lestaly, 0.75.0"
 #load ".pocketbase-client.csx"
 #nullable enable
 using System.Threading;

@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.74.0"
+#r "nuget: Lestaly, 0.75.0"
 #r "nuget: Npgsql.EntityFrameworkCore.PostgreSQL, 9.0.4"
 #r "nuget: Microsoft.EntityFrameworkCore.Sqlite, 9.0.4"
 #nullable enable
