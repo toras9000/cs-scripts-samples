@@ -27,7 +27,7 @@ var settings = new
 
 return await Paved.RunAsync(async () =>
 {
-    using var signal = ConsoleWig.CreateCancelKeyHandlePeriod();
+    using var signal = new SignalCancellationPeriod();
 
     WriteLine("Preparing to connect");
 

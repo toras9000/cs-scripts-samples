@@ -3,10 +3,9 @@
 #r "nuget: Microsoft.EntityFrameworkCore.Sqlite, 9.0.4"
 #nullable enable
 using System.ComponentModel.DataAnnotations.Schema;
-using DocumentFormat.OpenXml.Drawing.Charts;
-using Lestaly;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Lestaly;
 using Npgsql;
 
 // This script must be run with `--isolated-load-context` to avoid assembly race problems.

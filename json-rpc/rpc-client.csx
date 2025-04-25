@@ -17,7 +17,7 @@ var settings = new
 
 return await Paved.RunAsync(config: o => o.PauseOnExit = true, action: async () =>
 {
-    using var signal = ConsoleWig.CreateCancelKeyHandlePeriod();
+    using var signal = new SignalCancellationPeriod();
 
     WriteLine($"Connect to {settings.Service.Endpoint}");
     using var tcp = new TcpClient();

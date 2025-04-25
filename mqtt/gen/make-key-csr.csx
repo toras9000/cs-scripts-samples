@@ -19,7 +19,7 @@ var settings = new
 
 return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
 {
-    using var signal = ConsoleWig.CreateCancelKeyHandlePeriod();
+    using var signal = new SignalCancellationPeriod();
 
     WriteLine("Generate key file");
     using var key = RSA.Create();

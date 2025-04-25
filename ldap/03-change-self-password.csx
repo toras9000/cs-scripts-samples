@@ -110,7 +110,7 @@ return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
             if (newpass == null) throw new PavedMessageException("The change was discontinued because of repeated failures.");
 
             // Hash the password.
-            var encPass = LdapExtensions.MakePasswordHash.SHA256(newpass);
+            var encPass = LdapExtensions.MakePasswordHash.SSHA256(newpass);
 
             // Create password attribute change information.
             var changePass = new DirectoryAttributeModification();

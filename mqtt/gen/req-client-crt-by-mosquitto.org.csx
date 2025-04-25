@@ -22,7 +22,7 @@ var settings = new
 
 return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
 {
-    using var signal = ConsoleWig.CreateCancelKeyHandlePeriod();
+    using var signal = new SignalCancellationPeriod();
 
     WriteLine("Read csr file");
     var csrPem = await settings.UseCsrFile.ReadAllTextAsync(signal.Token);

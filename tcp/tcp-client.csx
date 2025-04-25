@@ -19,7 +19,7 @@ return await Paved.RunAsync(async () =>
 {
     // Preparation for Console
     using var outenc = ConsoleWig.OutputEncodingPeriod(Encoding.UTF8);
-    using var signal = ConsoleWig.CreateCancelKeyHandlePeriod();
+    using var signal = new SignalCancellationPeriod();
 
     // Indicate the status.
     var endpoint = new IPEndPoint(settings.Server.Host, settings.Server.Port);

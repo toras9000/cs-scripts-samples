@@ -13,18 +13,20 @@ return await Paved.RunAsync(async () =>
 {
     // Console-related preparations
     using var outenc = ConsoleWig.OutputEncodingPeriod(Encoding.UTF8);
-    using var signal = ConsoleWig.CreateCancelKeyHandlePeriod();
+    using var signal = new SignalCancellationPeriod();
 
     while (true)
     {
         // Enter database path
         WriteLine();
-        WriteLine("input SQLite database file path.(drag&drop)"); Write(">");
-        var input = (await ConsoleWig.ReadKeysLineIfAsync(t => t.Unquote().EndsWithAny([".db", ".sqlite"]))).Unquote();
-        if (input.IsWhite()) break;
+        WriteLine("input SQLite database file path.(drag&drop)");
+        Write(">");
+        var input = ReadLine()?.Unquote();
+        if (input == null) break;
+        if (input.IsWhite()) continue;
 
         // Existence check of the specified file
-        var dbFile = CurrentDir.RelativeFile(input.Unquote());
+        var dbFile = CurrentDir.RelativeFile(input);
         if (!dbFile.Exists)
         {
             WriteLine($"Not found '{dbFile.FullName}'");
@@ -42,6 +44,7 @@ return await Paved.RunAsync(async () =>
             config.FailIfMissing = true;
             config.ReadOnly = true;
             config.ForeignKeys = true;
+            config.Pooling = false;
 
             // Open database
             using var db = new SQLiteConnection(config.ConnectionString);

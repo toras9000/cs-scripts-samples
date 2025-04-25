@@ -16,7 +16,7 @@ var settings = new
 return await Paved.RunAsync(config: o => o.PauseOnExit = true, action: async () =>
 {
     // Handle cancel key press
-    using var signal = ConsoleWig.CreateCancelKeyHandlePeriod();
+    using var signal = new SignalCancellationPeriod();
 
     // Generate anonymous access client for target registry
     WriteLine($"Registry: {settings.Url}");

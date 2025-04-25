@@ -1,7 +1,5 @@
-#r "nuget: ProcessX, 1.5.5"
 #r "nuget: Lestaly, 0.75.0"
-using Zx;
 using Lestaly;
+using Lestaly.Cx;
 
-var script = ThisSource.RelativeFile("rec-entityframework.csx");
-await $"dotnet script --isolated-load-context {script.FullName}";
+await "dotnet".args("script", "--isolated-load-context", ThisSource.RelativeFile("rec-entityframework.csx"));

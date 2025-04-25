@@ -42,9 +42,9 @@ record OpenMetro(
 
 return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
 {
-    using var signal = ConsoleWig.CreateCancelKeyHandlePeriod();
+    using var signal = new SignalCancellationPeriod();
 
-    Console.WriteLine($"Obtain weather information ...");
+    WriteLine($"Obtain weather information ...");
     var weatherParams = typeof(OpenMetroData).GetProperties().Select(p => p.Name).Where(n => n != nameof(OpenMetroData.time));
     var openMetroEp = new Uri($"https://api.open-meteo.com/v1/forecast?latitude={settings.Position.Latitude}&longitude={settings.Position.Longitude}&hourly={weatherParams.JoinString(",")}");
 
@@ -52,7 +52,7 @@ return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
     var weather = await client.GetFromJsonAsync<OpenMetro>(openMetroEp, signal.Token);
 
     var saveFile = ThisSource.RelativeFile($"open-metro-{DateTime.Now:yyyyMMdd_HHmmss}.xlsx");
-    Console.WriteLine($"Save to an Excel file ... {saveFile.Name}");
+    WriteLine($"Save to an Excel file ... {saveFile.Name}");
     var saveOptions = new SaveToExcelOptions();
     saveOptions.CaptionSelector = (m, i) => m.Name switch
     {
@@ -76,7 +76,7 @@ return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
         ))
         .SaveToExcel(saveFile, saveOptions);
 
-    Console.WriteLine($"Completed");
+    WriteLine($"Completed");
 });
 
 record OpenMetroRow(

@@ -1,15 +1,13 @@
 #r "nuget: ClosedXML, 0.104.2"
 #r "nuget: Lestaly, 0.75.0"
 #r "nuget: Kokuban, 0.2.0"
-using Lestaly;
-using Kokuban;
 using ClosedXML.Excel;
+using Kokuban;
+using Lestaly;
 
 return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
 {
     await Task.CompletedTask;
-
-    using var signal = ConsoleWig.CreateCancelKeyHandlePeriod();
 
     while (true)
     {

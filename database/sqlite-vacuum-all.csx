@@ -3,20 +3,21 @@
 #r "nuget: Dapper, 2.1.35"
 #r "nuget: Kokuban, 0.2.0"
 #nullable enable
+using System.Data.SQLite;
 using Dapper;
 using Kokuban;
 using Lestaly;
-using System.Data.SQLite;
 
 return await Paved.RunAsync(config: c => c.AnyPause(), action: async () =>
 {
     // Console-related preparations
     using var outenc = ConsoleWig.OutputEncodingPeriod(Encoding.UTF8);
-    using var signal = ConsoleWig.CreateCancelKeyHandlePeriod();
+    using var signal = new SignalCancellationPeriod();
 
     // Enter scan path
     WriteLine();
-    WriteLine("input scan directory"); Write(">");
+    WriteLine("input scan directory");
+    Write(">");
     var input = ReadLine()?.Unquote();
     if (input.IsWhite()) return;
 

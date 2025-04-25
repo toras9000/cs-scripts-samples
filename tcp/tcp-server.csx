@@ -19,16 +19,16 @@ return await Paved.RunAsync(async () =>
 {
     // Preparation for Console
     using var outenc = ConsoleWig.OutputEncodingPeriod(Encoding.UTF8);
-    using var signal = ConsoleWig.CreateCancelKeyHandlePeriod();
+    using var signal = new SignalCancellationPeriod();
 
     // Indicate the status.
     var endpoint = new IPEndPoint(settings.Server.Interface, settings.Server.Port);
-    Console.WriteLine($"Listen on {endpoint}");
+    WriteLine($"Listen on {endpoint}");
 
     while (true)
     {
         // Waiting for connection.
-        Console.WriteLine($"Wait for connection ...");
+        WriteLine($"Wait for connection ...");
         var tcp = default(TcpClient);
         do
         {
@@ -38,7 +38,7 @@ return await Paved.RunAsync(async () =>
         } while (false);
 
         // Display the connection source.
-        Console.WriteLine($"Connection was accepted from {tcp.Client.RemoteEndPoint}");
+        WriteLine($"Connection was accepted from {tcp.Client.RemoteEndPoint}");
 
         // Generates a token source that aborts processing for the current connection.
         var braker = CancellationTokenSource.CreateLinkedTokenSource(signal.Token);

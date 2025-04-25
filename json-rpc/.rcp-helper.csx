@@ -8,53 +8,44 @@ using Lestaly;
 
 static async Task InterpretCommandsAsync(IMemoryService memory, CancellationToken cancelToken)
 {
-    var comparer = StringComparer.InvariantCultureIgnoreCase;
     while (true)
     {
         Write(">");
-        var input = await ConsoleWig.ReadLineAsync(cancelToken);
+        var input = ReadLine();
+        if (input == null) break;
         if (input.IsWhite()) continue;
 
         try
         {
-            var fields = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            var cmd = fields[0];
-            if (comparer.Equals(cmd, "help") || comparer.Equals(cmd, "?"))
+            var cmd = input.TakeSkipToken(out var args, delimiter: ' ');
+            if (cmd.RoughAny(["help", "?"]))
             {
                 WriteLine($"Command list");
                 WriteLine($"  get <key>");
                 WriteLine($"  set <key> <value>");
                 WriteLine($"  list");
             }
-            else if (comparer.Equals(cmd, "get"))
+            else if (cmd.RoughAny(["get"]))
             {
-                if (fields.Length < 2) throw new Exception("Parameter missing");
-                var key = fields[1];
+                var key = args.TakeSkipToken(out args).ThrowIfWhite(() => new Exception("Parameter missing")).ToString();
                 var value = await memory.GetEntryAsync(key);
                 WriteLine((value == null) ? $"no entry" : $"{key} = {value}");
             }
-            else if (comparer.Equals(cmd, "set"))
+            else if (cmd.RoughAny(["set"]))
             {
-                if (fields.Length < 3) throw new Exception("Parameter missing");
-                var key = fields[1];
-                var value = fields[2];
+                var key = args.TakeSkipToken(out args).ThrowIfWhite(() => new Exception("Parameter missing")).ToString();
+                var value = args.TakeSkipToken(out args).ThrowIfWhite(() => new Exception("Parameter missing")).ToString();
                 await memory.SetEntryAsync(key, value);
                 WriteLine($"{key} = {value}");
             }
-            else if (comparer.Equals(cmd, "list"))
+            else if (cmd.RoughAny(["list"]))
             {
                 var list = await memory.GetListAsync();
-                if (list.Length <= 0)
+                foreach (var (key, value) in list)
                 {
-                    WriteLine($"no entry");
+                    WriteLine($"{key} = {value}");
                 }
-                else
-                {
-                    foreach (var (key, value) in list)
-                    {
-                        WriteLine($"{key} = {value}");
-                    }
-                }
+                if (list.Length <= 0) WriteLine($"no entry");
             }
             else
             {
@@ -65,6 +56,8 @@ static async Task InterpretCommandsAsync(IMemoryService memory, CancellationToke
         {
             WriteLine(Chalk.Yellow[ex.Message]);
         }
-
     }
 }
+
+public static ReadOnlySpan<char> ThrowIfWhite(this ReadOnlySpan<char> self, Func<Exception>? generator = null)
+    => self.IsEmpty ? throw generator?.Invoke() ?? new InvalidDataException() : self;

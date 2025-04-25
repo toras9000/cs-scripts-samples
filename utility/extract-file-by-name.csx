@@ -24,7 +24,7 @@ return await Paved.RunAsync(config: c => c.AnyPause(), action: async () =>
 {
     // Prepare console
     using var outenc = ConsoleWig.OutputEncodingPeriod(Encoding.UTF8);
-    using var signal = ConsoleWig.CreateCancelKeyHandlePeriod();
+    using var signal = new SignalCancellationPeriod();
 
     // Enter source directory
     WriteLine("Enter source directory"); Write(">");
