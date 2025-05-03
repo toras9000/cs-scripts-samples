@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.75.0"
+#r "nuget: Lestaly, 0.79.0"
 #r "nuget: Npgsql.EntityFrameworkCore.PostgreSQL, 9.0.4"
 #r "nuget: Microsoft.EntityFrameworkCore.Sqlite, 9.0.4"
 #nullable enable
@@ -33,14 +33,14 @@ static partial class DbPreferense
     });
 }
 
-return await Paved.RunAsync(config: c => c.AnyPause(), action: async () =>
+return await Paved.ProceedAsync(async () =>
 {
     // Create DB connection option
-    var options = DbPreferense.CreateSqliteOptions();
-    //var options = DbPreferense.CreatePostgresOptions();
+    var dbOptions = DbPreferense.CreateSqliteOptions();
+    //var dbOptions = DbPreferense.CreatePostgresOptions();
 
     // Create DB context
-    using var db = new DriveSpaceDbContext(options);
+    using var db = new DriveSpaceDbContext(dbOptions);
 
     // Ensure database create
     await db.Database.EnsureCreatedAsync();

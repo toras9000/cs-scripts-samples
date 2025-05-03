@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.75.0"
+#r "nuget: Lestaly, 0.79.0"
 #nullable enable
 using System.Net.Http;
 using Lestaly;
@@ -13,7 +13,7 @@ var settings = new
     SaveCaCert = ThisSource.RelativeFile("../certs/ca.crt"),
 };
 
-return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
+return await Paved.ProceedAsync(async () =>
 {
     using var signal = new SignalCancellationPeriod();
 

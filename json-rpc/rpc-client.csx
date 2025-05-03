@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.75.0"
+#r "nuget: Lestaly, 0.79.0"
 #r "nuget: StreamJsonRpc, 2.21.69"
 #load ".rcp-helper.csx"
 #nullable enable
@@ -15,7 +15,7 @@ var settings = new
     },
 };
 
-return await Paved.RunAsync(config: o => o.PauseOnExit = true, action: async () =>
+return await Paved.ProceedAsync(async () =>
 {
     using var signal = new SignalCancellationPeriod();
 

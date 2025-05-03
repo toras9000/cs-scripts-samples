@@ -1,5 +1,5 @@
 #r "nuget: Docker.Registry.DotNet, 2.0.0"
-#r "nuget: Lestaly, 0.75.0"
+#r "nuget: Lestaly, 0.79.0"
 #nullable enable
 using System.Threading;
 using Docker.Registry.DotNet;
@@ -13,7 +13,7 @@ var settings = new
     Url = "https://registry.toras.home",
 };
 
-return await Paved.RunAsync(config: o => o.PauseOnExit = true, action: async () =>
+return await Paved.ProceedAsync(async () =>
 {
     // Handle cancel key press
     using var signal = new SignalCancellationPeriod();

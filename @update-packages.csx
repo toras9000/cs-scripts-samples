@@ -1,5 +1,5 @@
 #r "nuget: Kokuban, 0.2.0"
-#r "nuget: Lestaly, 0.75.0"
+#r "nuget: Lestaly, 0.79.0"
 #nullable enable
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
@@ -18,9 +18,9 @@ var settings = new
     // Packages and versions to be unified and updated
     Packages = new PackageVersion[]
     {
-        new("Lestaly",                               "0.75.0"),
+        new("Lestaly",                               "0.79.0"),
         new("Docker.Registry.DotNet",                "2.0.0"),
-        new("SkiaSharp",                             "3.116.1"),
+        new("SkiaSharp",                             "3.119.0"),
         new("MQTTnet",                               "5.0.1.1416"),
         new("AngleSharp",                            "1.3.0"),
         new("StreamJsonRpc",                         "2.21.69"),
@@ -35,7 +35,7 @@ var settings = new
     },
 };
 
-return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
+return await Paved.ProceedAsync(async () =>
 {
     // Detection regular expression for package reference directives
     var detector = new Regex(@"^\s*#\s*r\s+""\s*nuget\s*:\s*(?<package>[a-zA-Z0-9_\-\.]+)(?:,| )\s*(?<version>.+)\s*""");
@@ -109,38 +109,5 @@ return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
 // Package version information data type
 record PackageVersion(string Name, string Version)
 {
-    public SemanticVersion SemanticVersion { get; } = new SemanticVersion(Version);
-}
-
-// Data type for version value management
-record SemanticVersion
-{
-    public SemanticVersion(string version)
-    {
-        var match = VersionPattern.Match(version);
-        if (!match.Success) throw new ArgumentException("Illegal");
-        this.Original = version;
-        this.Major = int.Parse(match.Groups["major"].Value);
-        this.Minor = int.Parse(match.Groups["subver"].Captures[0].Value);
-        this.Patch = int.TryParse(match.Groups["subver"].Captures.ElementAtOrDefault(1)?.Value, out var patch) ? patch : default;
-        this.Filum = int.TryParse(match.Groups["subver"].Captures.ElementAtOrDefault(2)?.Value, out var filum) ? filum : default;
-        this.PreRelease = match.Groups["pre"].Value;
-        this.Build = match.Groups["build"].Value;
-    }
-
-    public string Original { get; }
-    public int Major { get; }
-    public int Minor { get; }
-    public int? Patch { get; }
-    public int? Filum { get; }
-    public string PreRelease { get; }
-    public string Build { get; }
-
-    public static bool TryParse(string text, [NotNullWhen(true)] out SemanticVersion? version)
-    {
-        try { version = new SemanticVersion(text); return true; }
-        catch { version = default; return false; }
-    }
-
-    private static readonly Regex VersionPattern = new(@"^(?<major>\d+)(?:\.(?<subver>\d+)){1,3}(?:\-(?<pre>.+))?(?:\+(?<build>.+))?$");
+    public SemanticVersion SemanticVersion { get; } = SemanticVersion.Parse(Version);
 }

@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.75.0"
+#r "nuget: Lestaly, 0.79.0"
 #load ".pocketbase-client.csx"
 #nullable enable
 using System.Threading;
@@ -15,7 +15,7 @@ var settings = new
     },
 };
 
-return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
+return await Paved.ProceedAsync(async () =>
 {
     using var client = new PocketBaseClient(settings.Url);
 

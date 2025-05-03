@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.75.0"
+#r "nuget: Lestaly, 0.79.0"
 #r "nuget: Kokuban, 0.2.0"
 #r "nuget: Kurukuru, 1.4.2"
 #nullable enable
@@ -20,7 +20,7 @@ var settings = new
     ExtractFile = true,
 };
 
-return await Paved.RunAsync(config: c => c.AnyPause(), action: async () =>
+return await Paved.ProceedAsync(async () =>
 {
     // Prepare console
     using var outenc = ConsoleWig.OutputEncodingPeriod(Encoding.UTF8);

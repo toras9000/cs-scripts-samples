@@ -1,6 +1,6 @@
 #r "nuget: System.DirectoryServices, 9.0.4"
 #r "nuget: System.DirectoryServices.Protocols, 9.0.4"
-#r "nuget: Lestaly, 0.75.0"
+#r "nuget: Lestaly, 0.79.0"
 #r "nuget: Kokuban, 0.2.0"
 #load ".text-helper.csx"
 #nullable enable
@@ -38,7 +38,7 @@ var settings = new
     },
 };
 
-return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
+return await Paved.ProceedAsync(async () =>
 {
     // Preparation for LDAP server connection
     WriteLine("Preparation for LDAP server connection");
@@ -56,10 +56,12 @@ return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
         WriteLine(Chalk.Inverse[$"Designation of password change target"]);
 
         // Enter authentication information.
-        var username = ConsoleWig.WriteLine("Username").Write(">").ReadLine();
+        WriteLine("Username"); Write(">");
+        var username = ReadLine();
         if (username.IsWhite()) break;
 
-        var password = ConsoleWig.WriteLine("Password (no echo back)").Write(">").ReadLineIntercepted();
+        WriteLine("Password (no echo back)"); Write(">");
+        var password = ConsoleWig.ReadLineIntercepted();
         WriteLine();
 
         // User DN
@@ -92,9 +94,11 @@ return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
             for (var i = 0; i < 3; i++)
             {
                 // Enter new password
-                var input1 = ConsoleWig.WriteLine("New Password (no echo back)").Write(">").ReadLineIntercepted();
+                WriteLine("New Password (no echo back)"); Write(">");
+                var input1 = ConsoleWig.ReadLineIntercepted();
                 WriteLine();
-                var input2 = ConsoleWig.WriteLine("Re-enter for confirmation (no echo back)").Write(">").ReadLineIntercepted();
+                WriteLine("Re-enter for confirmation (no echo back)"); Write(">");
+                var input2 = ConsoleWig.ReadLineIntercepted();
                 WriteLine();
 
                 // Verification of input results
@@ -112,17 +116,8 @@ return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
             // Hash the password.
             var encPass = LdapExtensions.MakePasswordHash.SSHA256(newpass);
 
-            // Create password attribute change information.
-            var changePass = new DirectoryAttributeModification();
-            changePass.Operation = DirectoryAttributeOperation.Replace;
-            changePass.Name = "userPassword";
-            changePass.Add(encPass);
-
             // Request changes.
-            var updateReq = new ModifyRequest();
-            updateReq.DistinguishedName = userDn;
-            updateReq.Modifications.Add(changePass);
-            var updateRsp = await ldap.SendRequestAsync(updateReq);
+            var updateRsp = await ldap.ReplaceAttributeAsync(userDn, "userPassword", [encPass]);
             if (updateRsp.ResultCode != 0) throw new PavedMessageException($"failed to request: code={updateRsp.ResultCode}, msg={updateRsp.ErrorMessage}");
 
             WriteLine(Chalk.Green[$"Successfully changed password"]);

@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.75.0"
+#r "nuget: Lestaly, 0.79.0"
 #nullable enable
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
@@ -17,7 +17,7 @@ var settings = new
     CsrSubjects = "C=JP, ST=Tokyo, O=Test, CN=test.example",
 };
 
-return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
+return await Paved.ProceedAsync(async () =>
 {
     using var signal = new SignalCancellationPeriod();
 

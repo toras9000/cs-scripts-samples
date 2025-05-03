@@ -1,6 +1,6 @@
 #r "nuget: System.DirectoryServices, 9.0.4"
 #r "nuget: System.DirectoryServices.Protocols, 9.0.4"
-#r "nuget: Lestaly, 0.75.0"
+#r "nuget: Lestaly, 0.79.0"
 #r "nuget: Kokuban, 0.2.0"
 #nullable enable
 using System.DirectoryServices.Protocols;
@@ -36,7 +36,7 @@ var settings = new
     },
 };
 
-return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
+return await Paved.ProceedAsync(async () =>
 {
     // Bind to LDAP server
     WriteLine("Bind to LDAP server");
@@ -56,7 +56,8 @@ return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
     ldap.Bind();
 
     // Ask the user to enter a search target.
-    var targetDn = settings.Search.FixedTargetDn.WhenWhite(ConsoleWig.NewLine().WriteLine("Enter the base DN for the search.").Write(">").ReadLine().CancelIfWhite());
+    WriteLine(); WriteLine("Enter the base DN for the search."); Write(">");
+    var targetDn = settings.Search.FixedTargetDn.WhenWhite(ReadLine().CancelIfWhite());
 
     // Current Search Scope. Changes with search input.
     var scope = SearchScope.OneLevel;

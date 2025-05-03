@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.75.0"
+#r "nuget: Lestaly, 0.79.0"
 #r "nuget: System.Data.SQLite.Core, 1.0.119"
 #r "nuget: Dapper, 2.1.35"
 #r "nuget: Kokuban, 0.2.0"
@@ -8,7 +8,7 @@ using Dapper;
 using Kokuban;
 using Lestaly;
 
-return await Paved.RunAsync(config: c => c.AnyPause(), action: async () =>
+return await Paved.ProceedAsync(async () =>
 {
     // Console-related preparations
     using var outenc = ConsoleWig.OutputEncodingPeriod(Encoding.UTF8);

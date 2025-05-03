@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.75.0"
+#r "nuget: Lestaly, 0.79.0"
 #r "nuget: System.Data.SQLite.Core, 1.0.119"
 #r "nuget: Kokuban, 0.2.0"
 #nullable enable
@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 using Kokuban;
 using Lestaly;
 
-return await Paved.RunAsync(async () =>
+return await Paved.ProceedAsync(async () =>
 {
     // Console-related preparations
     using var outenc = ConsoleWig.OutputEncodingPeriod(Encoding.UTF8);

@@ -1,11 +1,11 @@
 #r "nuget: ClosedXML, 0.104.2"
-#r "nuget: Lestaly, 0.75.0"
+#r "nuget: Lestaly, 0.79.0"
 #r "nuget: Kokuban, 0.2.0"
 using ClosedXML.Excel;
 using Kokuban;
 using Lestaly;
 
-return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
+return await Paved.ProceedAsync(async () =>
 {
     await Task.CompletedTask;
 

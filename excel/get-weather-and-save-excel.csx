@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.75.0"
+#r "nuget: Lestaly, 0.79.0"
 using System.Net.Http;
 using System.Net.Http.Json;
 using Lestaly;
@@ -40,7 +40,7 @@ record OpenMetro(
     OpenMetroData hourly
 );
 
-return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
+return await Paved.ProceedAsync(async () =>
 {
     using var signal = new SignalCancellationPeriod();
 

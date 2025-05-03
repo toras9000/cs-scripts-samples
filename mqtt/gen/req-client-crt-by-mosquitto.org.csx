@@ -1,5 +1,5 @@
 #r "nuget: AngleSharp, 1.3.0"
-#r "nuget: Lestaly, 0.75.0"
+#r "nuget: Lestaly, 0.79.0"
 #nullable enable
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
@@ -20,7 +20,7 @@ var settings = new
     SaveClientCert = ThisSource.RelativeFile("../certs/client.crt"),
 };
 
-return await Paved.RunAsync(config: o => o.AnyPause(), action: async () =>
+return await Paved.ProceedAsync(async () =>
 {
     using var signal = new SignalCancellationPeriod();
 
