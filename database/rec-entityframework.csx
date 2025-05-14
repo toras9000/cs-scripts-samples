@@ -1,6 +1,6 @@
-#r "nuget: Lestaly, 0.79.0"
+#r "nuget: Lestaly, 0.80.0"
 #r "nuget: Npgsql.EntityFrameworkCore.PostgreSQL, 9.0.4"
-#r "nuget: Microsoft.EntityFrameworkCore.Sqlite, 9.0.4"
+#r "nuget: Microsoft.EntityFrameworkCore.Sqlite, 9.0.5"
 #nullable enable
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.Data.Sqlite;

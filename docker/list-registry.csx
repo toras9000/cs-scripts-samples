@@ -1,5 +1,5 @@
 #r "nuget: Docker.Registry.DotNet, 2.0.0"
-#r "nuget: Lestaly, 0.79.0"
+#r "nuget: Lestaly, 0.80.0"
 #nullable enable
 using System.Threading;
 using Docker.Registry.DotNet;
