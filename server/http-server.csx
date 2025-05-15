@@ -1,5 +1,5 @@
 #r "sdk:Microsoft.NET.Sdk.Web"
-#r "nuget: Lestaly, 0.80.0"
+#r "nuget: Lestaly, 0.81.0"
 #nullable enable
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
