@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.81.0"
+#r "nuget: Lestaly, 0.82.0"
 #nullable enable
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;

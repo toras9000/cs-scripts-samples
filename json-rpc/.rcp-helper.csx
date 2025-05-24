@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.81.0"
+#r "nuget: Lestaly, 0.82.0"
 #r "nuget: Kokuban, 0.2.0"
 #load ".rpc-contract.csx"
 #nullable enable
@@ -8,6 +8,7 @@ using Lestaly;
 
 static async Task InterpretCommandsAsync(IMemoryService memory, CancellationToken cancelToken)
 {
+    var delimiters = new char[] { ' ', '\t' };
     while (true)
     {
         Write(">");
@@ -17,7 +18,7 @@ static async Task InterpretCommandsAsync(IMemoryService memory, CancellationToke
 
         try
         {
-            var cmd = input.TakeSkipToken(out var args, delimiter: ' ');
+            var cmd = input.TrimStart(delimiters).TakeSkipFirstTokenAny(out var args, delimiters);
             if (cmd.RoughAny(["help", "?"]))
             {
                 WriteLine($"Command list");
@@ -27,14 +28,14 @@ static async Task InterpretCommandsAsync(IMemoryService memory, CancellationToke
             }
             else if (cmd.RoughAny(["get"]))
             {
-                var key = args.TakeSkipToken(out args).ThrowIfWhite(() => new Exception("Parameter missing")).ToString();
+                var key = args.TrimStart(delimiters).TakeSkipFirstTokenAny(out args, delimiters).ThrowIfWhite(() => new Exception("Parameter missing")).ToString();
                 var value = await memory.GetEntryAsync(key);
                 WriteLine((value == null) ? $"no entry" : $"{key} = {value}");
             }
             else if (cmd.RoughAny(["set"]))
             {
-                var key = args.TakeSkipToken(out args).ThrowIfWhite(() => new Exception("Parameter missing")).ToString();
-                var value = args.TakeSkipToken(out args).ThrowIfWhite(() => new Exception("Parameter missing")).ToString();
+                var key = args.TrimStart(delimiters).TakeSkipFirstTokenAny(out args, delimiters).ThrowIfWhite(() => new Exception("Parameter missing")).ToString();
+                var value = args.TrimStart(delimiters).TakeSkipFirstTokenAny(out args, delimiters).ThrowIfWhite(() => new Exception("Parameter missing")).ToString();
                 await memory.SetEntryAsync(key, value);
                 WriteLine($"{key} = {value}");
             }

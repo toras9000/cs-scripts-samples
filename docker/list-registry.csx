@@ -1,5 +1,5 @@
 #r "nuget: Docker.Registry.DotNet, 2.0.0"
-#r "nuget: Lestaly, 0.81.0"
+#r "nuget: Lestaly, 0.82.0"
 #nullable enable
 using System.Threading;
 using Docker.Registry.DotNet;
@@ -45,7 +45,7 @@ return await Paved.ProceedAsync(async () =>
             // Make additional information for the manifest
             static string imageInfo(ImageManifest manifest) => manifest switch
             {
-                ImageManifest2_2 v2 => $"Size={v2.Layers!.Sum(l => l.Size).ToHumanize()}iB, Digest={v2.Config!.Digest!.SkipToken(':')[..12]}",
+                ImageManifest2_2 v2 => $"Size={v2.Layers!.Sum(l => l.Size).ToHumanize()}iB, Digest={v2.Config!.Digest!.SkipFirstToken(':')[..12]}",
                 _ => "",
             };
 

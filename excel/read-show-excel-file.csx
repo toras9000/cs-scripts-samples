@@ -1,5 +1,5 @@
 #r "nuget: ClosedXML, 0.105.0"
-#r "nuget: Lestaly, 0.81.0"
+#r "nuget: Lestaly, 0.82.0"
 #r "nuget: Kokuban, 0.2.0"
 using ClosedXML.Excel;
 using Kokuban;

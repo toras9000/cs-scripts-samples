@@ -1,5 +1,5 @@
 #r "sdk:Microsoft.NET.Sdk.Web"
-#r "nuget: Lestaly, 0.81.0"
+#r "nuget: Lestaly, 0.82.0"
 #r "nuget: Kokuban, 0.2.0"
 #nullable enable
 using System.IO;
