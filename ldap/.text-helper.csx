@@ -1,4 +1,4 @@
-#r "nuget: Lestaly, 0.82.0"
+#r "nuget: Lestaly, 0.84.0"
 #nullable enable
 using System.Text.RegularExpressions;
 using Lestaly;
