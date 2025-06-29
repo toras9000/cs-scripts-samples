@@ -1,7 +1,9 @@
 #r "nuget: ClosedXML, 0.105.0"
-#r "nuget: Lestaly, 0.84.0"
+#r "nuget: Lestaly, 0.100.0"
+#r "nuget: CometFlavor.Unicode, 0.7.0"
 #r "nuget: Kokuban, 0.2.0"
 using ClosedXML.Excel;
+using CometFlavor.Unicode.Extensions.Text;
 using Kokuban;
 using Lestaly;
 
@@ -33,6 +35,7 @@ return await Paved.ProceedAsync(async () =>
             var usedFirstRow = used.FirstRow().RowNumber();
             var numWidth = 4;
             var colWidth = 14;
+            var eawMeasure = new EawMeasure(1, 2, 1);
             var showRows = Math.Min(used.RowCount(), 10);
             var showCols = Math.Min(used.ColumnCount(), 6);
             var colLetters = Enumerable.Range(0, showCols).Select(n => XLHelper.GetColumnLetterFromNumber(usedFirstCol + n));
@@ -45,7 +48,7 @@ return await Paved.ProceedAsync(async () =>
                 for (var colIdx = 0; colIdx < showCols; colIdx++)
                 {
                     var cellText = row.Cell(1 + colIdx).GetFormattedString();
-                    var showText = cellText.EllipsisByWidth(colWidth).PadRight(colWidth);
+                    var showText = cellText.EllipsisByWidth(colWidth, eawMeasure).PadRight(colWidth);
                     Write($"{showText} ");
                 }
                 WriteLine();
