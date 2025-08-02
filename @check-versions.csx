@@ -1,6 +1,6 @@
 #r "nuget: NuGet.Protocol, 6.14.0"
 #r "nuget: R3, 1.3.0"
-#r "nuget: Lestaly, 0.101.0"
+#r "nuget: Lestaly, 0.102.0"
 #nullable enable
 using Lestaly;
 using NuGet.Common;

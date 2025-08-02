@@ -1,4 +1,4 @@
-#r "nuget: MailKit, 4.11.0"
+#r "nuget: MailKit, 4.13.0"
 #nullable enable
 using MailKit.Net.Smtp;
 using MailKit;

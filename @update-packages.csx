@@ -1,7 +1,6 @@
 #r "nuget: Kokuban, 0.2.0"
-#r "nuget: Lestaly, 0.100.0"
+#r "nuget: Lestaly, 0.102.0"
 #nullable enable
-using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using Kokuban;
 using Lestaly;
@@ -18,22 +17,28 @@ var settings = new
     // Packages and versions to be unified and updated
     Packages = new PackageVersion[]
     {
-        new("Lestaly",                               "0.100.0"),
-        new("CometFlavor.Unicode",                   "0.7.0"),
-        new("Docker.Registry.DotNet",                "2.0.0"),
-        new("SkiaSharp",                             "3.119.0"),
-        new("MQTTnet",                               "5.0.1.1416"),
-        new("AngleSharp",                            "1.3.0"),
-        new("Microsoft.Playwright",                  "1.53.0"),
-        new("StreamJsonRpc",                         "2.22.11"),
-        new("System.Data.SQLite.Core",               "1.0.119"),
-        new("Npgsql.EntityFrameworkCore.PostgreSQL", "9.0.4"),
-        new("Microsoft.EntityFrameworkCore.Sqlite",  "9.0.6"),
-        new("ClosedXML",                             "0.105.0"),
-        new("Kokuban",                               "0.2.0"),
-        new("WebSerializer",                         "1.3.0"),
-        new("System.DirectoryServices",              "9.0.6"),
-        new("System.DirectoryServices.Protocols",    "9.0.6"),
+        new("Lestaly",                                 "0.102.0"     ),
+        new("CometFlavor.Unicode",                     "0.7.0"       ),
+        new("Kokuban",                                 "0.2.0"       ),
+        new("Kurukuru",                                "1.4.2"       ),
+        new("Cocona.Lite",                             "2.2.0"       ),
+        new("R3",                                      "1.3.0"       ),
+        new("StreamJsonRpc",                           "2.22.11"     ),
+        new("SkiaSharp",                               "3.119.0"     ),
+        new("Docker.Registry.DotNet",                  "2.0.0"       ),
+        new("MQTTnet",                                 "5.0.1.1416"  ),
+        new("AngleSharp",                              "1.3.0"       ),
+        new("Microsoft.Playwright",                    "1.54.0"      ),
+        new("System.Data.SQLite.Core",                 "1.0.119"     ),
+        new("Npgsql.EntityFrameworkCore.PostgreSQL",   "9.0.4"       ),
+        new("Microsoft.EntityFrameworkCore.Sqlite",    "9.0.7"       ),
+        new("Dapper",                                  "2.1.66"      ),
+        new("ClosedXML",                               "0.105.0"     ),
+        new("WebSerializer",                           "1.3.0"       ),
+        new("System.DirectoryServices",                "9.0.7"       ),
+        new("System.DirectoryServices.Protocols",      "9.0.7"       ),
+        new("NuGet.Protocol",                          "6.14.0"      ),
+        new("MailKit",                                 "4.13.0"      ),
     },
 };
 
@@ -48,7 +53,7 @@ return await Paved.ProceedAsync(async () =>
     // Search for scripts under the target directory
     foreach (var file in settings.TargetDir.EnumerateFiles("*.csx", SearchOption.AllDirectories))
     {
-        Console.WriteLine($"File: {file.RelativePathFrom(settings.TargetDir, ignoreCase: true)}");
+        WriteLine($"File: {file.RelativePathFrom(settings.TargetDir, ignoreCase: true)}");
 
         // Read file contents
         var lines = await file.ReadAllLinesAsync();
@@ -68,21 +73,21 @@ return await Paved.ProceedAsync(async () =>
             var pkgName = match.Groups["package"].Value;
             if (!versions.TryGetValue(pkgName, out var package))
             {
-                Console.WriteLine(Chalk.BrightYellow[$"  Skip: {pkgName} - Not update target"]);
+                WriteLine(Chalk.BrightYellow[$"  Skip: {pkgName} - Not update target"]);
                 continue;
             }
 
             // Parse the version number.
             if (!SemanticVersion.TryParse(match.Groups["version"].Value, out var pkgVer))
             {
-                Console.WriteLine(Chalk.BrightYellow[$"  Skip: Unable to recognize version number"]);
+                WriteLine(Chalk.Yellow[$"  Skip: Unable to recognize version number"]);
                 continue;
             }
 
             // Determine if the package version needs to be updated.
             if (pkgVer == package.SemanticVersion)
             {
-                Console.WriteLine(Chalk.BrightYellow[$"  Skip: {pkgName} - Already in version"]);
+                WriteLine(Chalk.Gray[$"  Skip: {pkgName} - Already in version"]);
                 continue;
             }
 
@@ -92,7 +97,7 @@ return await Paved.ProceedAsync(async () =>
 
             // set a flag that there is an update
             updated = true;
-            Console.WriteLine(Chalk.Green[$"  Update: {pkgName} {pkgVer.Original} -> {package.Version}"]);
+            WriteLine(Chalk.Green[$"  Update: {pkgName} {pkgVer.Original} -> {package.Version}"]);
         }
 
         // Write back to file if updates are needed
@@ -102,7 +107,7 @@ return await Paved.ProceedAsync(async () =>
         }
         else if (!detected)
         {
-            Console.WriteLine(Chalk.BrightYellow[$"  Directive not found"]);
+            WriteLine(Chalk.Gray[$"  Directive not found"]);
         }
     }
 
