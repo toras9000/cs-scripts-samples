@@ -1,5 +1,5 @@
 #r "nuget: Kokuban, 0.2.0"
-#r "nuget: Lestaly, 0.102.0"
+#r "nuget: Lestaly.General, 0.102.0"
 #nullable enable
 using System.Text.RegularExpressions;
 using Kokuban;
@@ -17,7 +17,9 @@ var settings = new
     // Packages and versions to be unified and updated
     Packages = new PackageVersion[]
     {
-        new("Lestaly",                                 "0.102.0"     ),
+        new("Lestaly.General",                         "0.102.0"     ),
+        new("Lestaly.Ldap",                            "0.100.0"     ),
+        new("Lestaly.Excel",                           "0.100.0"     ),
         new("CometFlavor.Unicode",                     "0.7.0"       ),
         new("Kokuban",                                 "0.2.0"       ),
         new("Kurukuru",                                "1.4.2"       ),
@@ -31,12 +33,12 @@ var settings = new
         new("Microsoft.Playwright",                    "1.54.0"      ),
         new("System.Data.SQLite.Core",                 "1.0.119"     ),
         new("Npgsql.EntityFrameworkCore.PostgreSQL",   "9.0.4"       ),
-        new("Microsoft.EntityFrameworkCore.Sqlite",    "9.0.7"       ),
+        new("Microsoft.EntityFrameworkCore.Sqlite",    "9.0.8"       ),
         new("Dapper",                                  "2.1.66"      ),
         new("ClosedXML",                               "0.105.0"     ),
         new("WebSerializer",                           "1.3.0"       ),
-        new("System.DirectoryServices",                "9.0.7"       ),
-        new("System.DirectoryServices.Protocols",      "9.0.7"       ),
+        new("System.DirectoryServices",                "9.0.8"       ),
+        new("System.DirectoryServices.Protocols",      "9.0.8"       ),
         new("NuGet.Protocol",                          "6.14.0"      ),
         new("MailKit",                                 "4.13.0"      ),
     },

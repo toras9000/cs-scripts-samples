@@ -1,4 +1,5 @@
-#r "nuget: Lestaly, 0.102.0"
+#r "nuget: Lestaly.General, 0.102.0"
+#r "nuget: Lestaly.Excel, 0.100.0"
 using System.Net.Http;
 using System.Net.Http.Json;
 using Lestaly;
