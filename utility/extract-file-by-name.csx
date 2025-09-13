@@ -1,6 +1,6 @@
 #r "nuget: Lestaly.General, 0.102.0"
 #r "nuget: Kokuban, 0.2.0"
-#r "nuget: Kurukuru, 1.4.2"
+#r "nuget: Kurukuru, 1.5.0"
 #nullable enable
 using System.Text.RegularExpressions;
 using Lestaly;
