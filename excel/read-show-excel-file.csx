@@ -2,6 +2,7 @@
 #r "nuget: Lestaly.General, 0.102.0"
 #r "nuget: CometFlavor.Unicode, 0.7.0"
 #r "nuget: Kokuban, 0.2.0"
+#nullable enable
 using ClosedXML.Excel;
 using CometFlavor.Unicode.Extensions.Text;
 using Kokuban;
@@ -31,6 +32,7 @@ return await Paved.ProceedAsync(async () =>
             var first = book.Worksheets.First();
             WriteLine(Chalk.Green[$"Some cells in sheet: {first.Name}"]);
             var used = first.RangeUsed();
+            if (used == null) throw new Exception("Cannot detect used range");
             var usedFirstCol = used.FirstColumn().ColumnNumber();
             var usedFirstRow = used.FirstRow().RowNumber();
             var numWidth = 4;

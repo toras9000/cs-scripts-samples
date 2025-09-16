@@ -1,5 +1,6 @@
 #r "nuget: Lestaly.General, 0.102.0"
 #r "nuget: Lestaly.Excel, 0.100.0"
+#nullable enable
 using System.Net.Http;
 using System.Net.Http.Json;
 using Lestaly;
@@ -51,6 +52,7 @@ return await Paved.ProceedAsync(async () =>
 
     using var client = new HttpClient();
     var weather = await client.GetFromJsonAsync<OpenMetro>(openMetroEp, signal.Token);
+    if (weather == null) throw new Exception("Cannnot get weather");
 
     var saveFile = ThisSource.RelativeFile($"open-metro-{DateTime.Now:yyyyMMdd_HHmmss}.xlsx");
     WriteLine($"Save to an Excel file ... {saveFile.Name}");
