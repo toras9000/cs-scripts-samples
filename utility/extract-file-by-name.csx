@@ -1,4 +1,4 @@
-#r "nuget: Lestaly.General, 0.102.0"
+#r "nuget: Lestaly.General, 0.104.0"
 #r "nuget: Kokuban, 0.2.0"
 #r "nuget: Kurukuru, 1.5.0"
 #nullable enable
@@ -42,7 +42,7 @@ return await Paved.ProceedAsync(async () =>
     var extractDir = settings.ExtractBaseDir.RelativeDirectory($"extract-pat-{searchDir.Name}-{DateTime.Now:yyyyMMdd_HHmmss}").WithCreate();
 
     // Search options
-    var searchOptions = new SelectFilesOptions(
+    var searchOptions = new VisitFilesOptions(
         Recurse: true,
         Handling: new(File: settings.ExtractFile, Directory: settings.ExtractDirectory),
         Sort: false,

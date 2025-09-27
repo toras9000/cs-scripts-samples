@@ -1,90 +1,79 @@
-#r "nuget: Lestaly.General, 0.102.0"
+#r "nuget: Lestaly.General, 0.104.0"
 #r "nuget: Lestaly.Excel, 0.100.0"
-#r "nuget: Cocona.Lite, 2.2.0"
 #nullable enable
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Cocona;
 using Lestaly;
 
 // Command line argument mapping type
-class Options : ICommandParameterSet
+var settings = new
 {
-    [Argument(Order = 0), Option(Description = "Search target directory"), HasDefaultValue]
-    public string? Target { get; set; }
+    // Exclusion patterns from search. (regex)
+    ExcludePatterns = new Regex[] { new("^.git"), new("^.hg"), new("^.svn"), },
 
-    [Option("outdir", ['o'], Description = "Output directory."), HasDefaultValue]
-    public string? OutDir { get; set; }
+    // Flag to output full path.
+    OutputFullName = true,
 
-    [Option("excludes", ['e'], Description = "Exclusion patterns from search. (regex)"), HasDefaultValue]
-    public string[] ExcludePatterns { get; set; } = ["^.git", "^.hg", "^.svn"];
+    // Flag to output timestamps.
+    WithTime = true,
 
-    [Option("fullname", ['f'], Description = "Flag to output full path.")]
-    public bool FullName { get; set; }
+    // Flag to output extension.
+    WithExt = true,
 
-    [Option("excel", ['l'], Description = "Flag to output as Excel file.")]
-    public bool FormatExcel { get; set; }
+    // Flag to output size.
+    WithSize = true,
 
-    [Option('t', Description = "Flag to output timestamps.")]
-    public bool WithTime { get; set; }
-
-    [Option('x', Description = "Flag to output extension.")]
-    public bool WithExt { get; set; }
-
-    [Option('s', Description = "Flag to output size.")]
-    public bool WithSize { get; set; }
-}
+    // Flag to output as Excel file.
+    FormatExcel = false,
+};
 
 // Data type for information collection and output
-record FileItem(string Path, string Extension, DateTime LastWrite, long Size);
+record FileItem(string? Path, string? Extension, DateTime? LastWrite, long? Size);
 
-await CoconaLiteApp.RunAsync(args: Args.ToArray(), commandBody: async (Options options) =>
+return await Paved.ProceedAsync(async () =>
 {
-    // If the search target is unspecified, let the user enter it.
-    var path = options.Target
-        .WhenWhite(() => ConsoleWig.Write("Search directory:\n>").ReadLine())
-        .WhenWhite(() => throw new OperationCanceledException());
+    using var signal = new SignalCancellationPeriod();
+    using var outenc = ConsoleWig.OutputEncodingPeriod(Encoding.UTF8);
 
-    // Exclusion list
-    var excludes = options.ExcludePatterns.CoalesceEmpty().DropEmpty()
-        .Select(p => new Regex(p))
-        .ToArray();
+    WriteLine("Search Directory");
+    Write(">");
+    var searchDir = ReadLine().CancelIfWhite().Unquote().CancelIfWhite().AsDirectoryInfo();
 
-    // Output File Information
-    var outDir = ThisSource.RelativeDirectory(options.OutDir);
-    var saveExt = options.FormatExcel ? "xlsx" : "csv";
-    var saveFile = outDir.RelativeFile($"files-{DateTime.Now:yyyyMMdd_HHmmss}.{saveExt}");
+    // search options
+    var options = new VisitFilesOptions(
+        Recurse: true,
+        SkipInaccessible: true,
+        Handling: VisitFilesHandling.OnlyFile,
+        FileFilter: file => !settings.ExcludePatterns.Any(re => re.IsMatch(file.Name)),
+        DirectoryFilter: dir => !settings.ExcludePatterns.Any(re => re.IsMatch(dir.Name))
+    );
+
+    // search files sequence
+    var fileList = searchDir.SelectFiles(options: options, selector: context => new FileItem(
+        Path: settings.OutputFullName ? context.File?.FullName : context.File?.RelativePathFrom(searchDir),
+        Extension: settings.WithExt ? context.File?.Extension : default,
+        LastWrite: settings.WithTime ? context.File?.LastAccessTime : default,
+        Size: settings.WithSize ? context.File?.Length : default
+    ));
 
     // Filter output members (columns)
     var memberFilter = (MemberInfo member) => member.Name switch
     {
-        nameof(FileItem.LastWrite) => options.WithTime,
-        nameof(FileItem.Extension) => options.WithExt,
-        nameof(FileItem.Size) => options.WithSize,
+        nameof(FileItem.LastWrite) => settings.WithTime,
+        nameof(FileItem.Extension) => settings.WithExt,
+        nameof(FileItem.Size) => settings.WithSize,
         _ => true,
     };
 
-    // Sequence of file search and output information conversion
-    var dir = new DirectoryInfo(path);
-    var filelist = dir.SelectFiles(c =>
-        {
-            var file = c.File!;
-            var path = options.FullName ? file!.FullName : file.RelativePathFrom(dir, ignoreCase: true);
-            var time = options.WithTime ? file.LastAccessTime : default;
-            var ext = options.WithExt ? file.Extension : "";
-            var size = options.WithSize ? file.Length : 0L;
-            return new FileItem(path, ext, time, size);
-        }, excludes)
-        ;
-
     // Save results to file
-    if (options.FormatExcel)
+    var outputFile = ThisSource.RelativeFile($"files-{DateTime.Now:yyyyMMdd_HHmmss}.csv");
+    if (settings.FormatExcel)
     {
-        filelist.SaveToExcel(saveFile, options: new() { MemberFilter = memberFilter, });
+        fileList.SaveToExcel(outputFile, options: new() { MemberFilter = memberFilter, });
     }
     else
     {
-        await filelist.SaveToCsvAsync(saveFile, options: new() { MemberFilter = memberFilter, });
+        await fileList.SaveToCsvAsync(outputFile, options: new() { MemberFilter = memberFilter, });
     }
 
 });

@@ -1,6 +1,6 @@
 #r "nuget: System.DirectoryServices, 9.0.9"
 #r "nuget: System.DirectoryServices.Protocols, 9.0.9"
-#r "nuget: Lestaly.General, 0.102.0"
+#r "nuget: Lestaly.General, 0.104.0"
 #r "nuget: Kokuban, 0.2.0"
 #load ".text-helper.csx"
 #nullable enable

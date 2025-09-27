@@ -1,5 +1,6 @@
+#!/usr/bin/env dotnet-script
 #r "nuget: Kokuban, 0.2.0"
-#r "nuget: Lestaly.General, 0.102.0"
+#r "nuget: Lestaly.General, 0.104.0"
 #nullable enable
 using System.Text.RegularExpressions;
 using Kokuban;
@@ -13,16 +14,15 @@ var settings = new
     // Packages and versions to be unified and updated
     Packages = new PackageVersion[]
     {
-        new("Lestaly.General",                         "0.102.0"     ),
-        new("Lestaly.Ldap",                            "0.100.0"     ),
+        new("Lestaly.General",                         "0.104.0"     ),
+        new("Lestaly.Ldap",                            "0.101.0"     ),
         new("Lestaly.Excel",                           "0.100.0"     ),
         new("CometFlavor.Unicode",                     "0.7.0"       ),
         new("Kokuban",                                 "0.2.0"       ),
         new("Kurukuru",                                "1.5.0"       ),
-        new("Cocona.Lite",                             "2.2.0"       ),
         new("R3",                                      "1.3.0"       ),
         new("StreamJsonRpc",                           "2.22.11"     ),
-        new("SkiaSharp",                               "3.119.0"     ),
+        new("SkiaSharp",                               "3.119.1"     ),
         new("Docker.Registry.DotNet",                  "2.0.0"       ),
         new("MQTTnet",                                 "5.0.1.1416"  ),
         new("AngleSharp",                              "1.3.0"       ),
@@ -51,7 +51,7 @@ return await Paved.ProceedAsync(async () =>
     // Search for scripts under the target directory
     foreach (var file in settings.TargetDir.EnumerateFiles("*.csx", SearchOption.AllDirectories))
     {
-        WriteLine($"File: {file.RelativePathFrom(settings.TargetDir, ignoreCase: true)}");
+        WriteLine($"File: {file.RelativePathFrom(settings.TargetDir)}");
 
         // Read file contents
         var lines = await file.ReadAllLinesAsync();
