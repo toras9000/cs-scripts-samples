@@ -1,4 +1,4 @@
-#r "nuget: Lestaly.General, 0.104.0"
+#r "nuget: Lestaly.General, 0.105.0"
 #r "nuget: System.Data.SQLite.Core, 1.0.119"
 #r "nuget: Kokuban, 0.2.0"
 #nullable enable
@@ -21,7 +21,7 @@ return await Paved.ProceedAsync(async () =>
         WriteLine();
         WriteLine("input SQLite database file path.(drag&drop)");
         Write(">");
-        var input = ReadLine()?.Unquote();
+        var input = ReadLine().Unquote();
         if (input == null) break;
         if (input.IsWhite()) continue;
 

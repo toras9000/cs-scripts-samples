@@ -1,4 +1,4 @@
-#r "nuget: Lestaly.General, 0.104.0"
+#r "nuget: Lestaly.General, 0.105.0"
 #r "nuget: System.Data.SQLite.Core, 1.0.119"
 #r "nuget: Dapper, 2.1.66"
 #r "nuget: Kokuban, 0.2.0"
@@ -18,7 +18,7 @@ return await Paved.ProceedAsync(async () =>
     WriteLine();
     WriteLine("input scan directory");
     Write(">");
-    var input = ReadLine()?.Unquote();
+    var input = ReadLine().Unquote();
     if (input.IsWhite()) return;
 
     var dbExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase);

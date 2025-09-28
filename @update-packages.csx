@@ -1,6 +1,6 @@
 #!/usr/bin/env dotnet-script
 #r "nuget: Kokuban, 0.2.0"
-#r "nuget: Lestaly.General, 0.104.0"
+#r "nuget: Lestaly.General, 0.105.0"
 #nullable enable
 using System.Text.RegularExpressions;
 using Kokuban;
@@ -14,7 +14,7 @@ var settings = new
     // Packages and versions to be unified and updated
     Packages = new PackageVersion[]
     {
-        new("Lestaly.General",                         "0.104.0"     ),
+        new("Lestaly.General",                         "0.105.0"     ),
         new("Lestaly.Ldap",                            "0.101.0"     ),
         new("Lestaly.Excel",                           "0.100.0"     ),
         new("CometFlavor.Unicode",                     "0.7.0"       ),

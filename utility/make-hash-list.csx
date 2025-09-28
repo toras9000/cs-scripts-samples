@@ -2,6 +2,8 @@
 #r "nuget: Lestaly.Excel, 0.100.0"
 #nullable enable
 using System.Reflection;
+using System.Runtime.Intrinsics.Arm;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using Lestaly;
 
@@ -13,15 +15,6 @@ var settings = new
 
     // Flag to output full path.
     OutputFullName = false,
-
-    // Flag to output timestamps.
-    WithTime = true,
-
-    // Flag to output extension.
-    WithExt = true,
-
-    // Flag to output size.
-    WithSize = true,
 
     // Flag to output as Excel file.
     FormatExcel = false,
@@ -47,33 +40,28 @@ return await Paved.ProceedAsync(async () =>
     );
 
     // search files sequence
-    var fileList = searchDir.SelectFiles(options: options, selector: context => new
+    var fileList = searchDir.SelectFilesAsync(options: options, selector: async context =>
     {
-        Path = settings.OutputFullName ? context.File?.FullName : context.File?.RelativePathFrom(searchDir),
-        Extension = settings.WithExt ? context.File?.Extension : default,
-        LastWrite = settings.WithTime ? context.File?.LastAccessTime : default,
-        Size = settings.WithSize ? context.File?.Length : default
+        using var stream = context.File!.OpenRead();
+        var sha1 = await SHA1.HashDataAsync(stream);
+        return new
+        {
+            Path = settings.OutputFullName ? context.File?.FullName : context.File?.RelativePathFrom(searchDir),
+            Size = context.File?.Length,
+            LastWrite = context.File?.LastAccessTime,
+            SHA1 = sha1.ToHexString(),
+        };
     });
-
-    // Filter output members (columns)
-    var fileItem = fileList.ElementDefault();
-    var memberFilter = (MemberInfo member) => member.Name switch
-    {
-        nameof(fileItem.LastWrite) => settings.WithTime,
-        nameof(fileItem.Extension) => settings.WithExt,
-        nameof(fileItem.Size) => settings.WithSize,
-        _ => true,
-    };
 
     // Save results to file
     var outputFile = ThisSource.RelativeFile($"files-{DateTime.Now:yyyyMMdd_HHmmss}.csv");
     if (settings.FormatExcel)
     {
-        fileList.SaveToExcel(outputFile, options: new() { MemberFilter = memberFilter, });
+        await fileList.SaveToExcelAsync(outputFile);
     }
     else
     {
-        await fileList.SaveToCsvAsync(outputFile, options: new() { MemberFilter = memberFilter, });
+        await fileList.SaveToCsvAsync(outputFile);
     }
 
 });

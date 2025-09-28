@@ -1,4 +1,4 @@
-#r "nuget: Lestaly.General, 0.104.0"
+#r "nuget: Lestaly.General, 0.105.0"
 #r "nuget: Kokuban, 0.2.0"
 #load ".rpc-contract.csx"
 #nullable enable

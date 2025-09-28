@@ -1,6 +1,6 @@
 #r "nuget: System.DirectoryServices, 9.0.9"
 #r "nuget: System.DirectoryServices.Protocols, 9.0.9"
-#r "nuget: Lestaly.General, 0.104.0"
+#r "nuget: Lestaly.General, 0.105.0"
 #r "nuget: Lestaly.Ldap, 0.101.0"
 #r "nuget: Kokuban, 0.2.0"
 #nullable enable
@@ -27,7 +27,7 @@ var settings = new
         ProtocolVersion = 3,
 
         // Bind user credential, null is anonymous
-        BindCredential = new NetworkCredential("uid=authenticator,ou=users,dc=myserver,o=home", "authenticator-pass"),
+        BindCredential = new NetworkCredential("uid=authenticator,ou=operators,dc=myserver,o=home", "authenticator-pass"),
     },
 
     // Search option
@@ -67,20 +67,21 @@ return await Paved.ProceedAsync(async () =>
     static string interpretFilter(string text, ref SearchScope scope)
     {
         var source = text.AsSpan().TrimStart();
-        if (source.StartsWithAnyIgnoreCase(["base:"]))
+        var next = 0;
+        if (source.RoughStartsAny(["base:"], out next))
         {
             scope = SearchScope.Base;
-            return source.Slice(source.IndexOf(':') + 1).ToString();
+            return source[next..].ToString();
         }
-        else if (source.StartsWithAnyIgnoreCase(["one:", "onelv:", "onelevel:"]))
+        else if (source.RoughStartsAny(["one:", "onelv:", "onelevel:"], out next))
         {
             scope = SearchScope.OneLevel;
-            return source.Slice(source.IndexOf(':') + 1).ToString();
+            return source[next..].ToString();
         }
-        else if (source.StartsWithAnyIgnoreCase(["sub:", "subtree:", "tree:"]))
+        else if (source.RoughStartsAny(["sub:", "subtree:", "tree:"], out next))
         {
             scope = SearchScope.Subtree;
-            return source.Slice(source.IndexOf(':') + 1).ToString();
+            return source[next..].ToString();
         }
 
         return text;
