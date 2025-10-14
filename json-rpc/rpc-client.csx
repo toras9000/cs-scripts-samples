@@ -1,5 +1,5 @@
-#r "nuget: Lestaly.General, 0.105.0"
-#r "nuget: StreamJsonRpc, 2.22.11"
+#r "nuget: Lestaly.General, 0.106.0"
+#r "nuget: StreamJsonRpc, 2.22.23"
 #load ".rcp-helper.csx"
 #nullable enable
 using System.Net;

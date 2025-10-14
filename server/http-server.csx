@@ -1,5 +1,5 @@
 #r "sdk:Microsoft.NET.Sdk.Web"
-#r "nuget: Lestaly.General, 0.105.0"
+#r "nuget: Lestaly.General, 0.106.0"
 #nullable enable
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -29,7 +29,7 @@ var settings = new
     LocalContents = ThisSource.RelativeDirectory(".."),
 };
 
-await Paved.RunAsync(async () =>
+return await Paved.RunAsync(async () =>
 {
     // Set output encoding to UTF8.
     using var outenc = ConsoleWig.OutputEncodingPeriod(Encoding.UTF8);

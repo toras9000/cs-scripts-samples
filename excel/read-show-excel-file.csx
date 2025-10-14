@@ -1,5 +1,5 @@
 #r "nuget: ClosedXML, 0.105.0"
-#r "nuget: Lestaly.General, 0.105.0"
+#r "nuget: Lestaly.General, 0.106.0"
 #r "nuget: CometFlavor.Unicode, 0.7.0"
 #r "nuget: Kokuban, 0.2.0"
 #nullable enable
