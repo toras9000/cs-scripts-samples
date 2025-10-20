@@ -36,6 +36,7 @@ var settings = new
         new("System.DirectoryServices.Protocols",      "9.0.10"      ),
         new("NuGet.Protocol",                          "6.14.0"      ),
         new("MailKit",                                 "4.14.1"      ),
+        new("Docker.DotNet",                           "3.125.15"    ),
     },
 };
 
