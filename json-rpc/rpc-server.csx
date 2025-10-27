@@ -1,4 +1,4 @@
-#r "nuget: Lestaly.General, 0.106.0"
+#r "nuget: Lestaly.General, 0.108.0"
 #r "nuget: Kokuban, 0.2.0"
 #r "nuget: StreamJsonRpc, 2.22.23"
 #load ".rcp-helper.csx"

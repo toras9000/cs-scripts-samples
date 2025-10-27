@@ -1,52 +1,52 @@
 #!/usr/bin/env dotnet-script
+#r "nuget: NuGet.Protocol, 6.14.0"
+#r "nuget: R3, 1.3.0"
 #r "nuget: Kokuban, 0.2.0"
-#r "nuget: Lestaly.General, 0.106.0"
+#r "nuget: Lestaly.General, 0.108.0"
 #nullable enable
 using System.Text.RegularExpressions;
 using Kokuban;
 using Lestaly;
+using NuGet.Common;
+using NuGet.Packaging.Core;
+using NuGet.Protocol;
+using NuGet.Protocol.Core.Types;
+using NuGet.Versioning;
+using R3;
+
+// This script requires a isolated assembly context.
+// `dotnet script --isolated-load-context ./@update-packages.csx`
 
 var settings = new
 {
     // Search directory for script files
     TargetDir = ThisSource.RelativeDirectory("./"),
 
-    // Packages and versions to be unified and updated
-    Packages = new PackageVersion[]
+    // Version of the package to pin
+    FixedVersions = new PackageIdentity[]
     {
-        new("Lestaly.General",                         "0.106.0"     ),
-        new("Lestaly.Ldap",                            "0.101.0"     ),
-        new("Lestaly.Excel",                           "0.100.0"     ),
-        new("CometFlavor.Unicode",                     "0.7.0"       ),
-        new("Kokuban",                                 "0.2.0"       ),
-        new("Kurukuru",                                "1.5.0"       ),
-        new("R3",                                      "1.3.0"       ),
-        new("StreamJsonRpc",                           "2.22.23"     ),
-        new("SkiaSharp",                               "3.119.1"     ),
-        new("MQTTnet",                                 "5.0.1.1416"  ),
-        new("AngleSharp",                              "1.3.0"       ),
-        new("Microsoft.Playwright",                    "1.55.0"      ),
-        new("System.Data.SQLite.Core",                 "1.0.119"     ),
-        new("Npgsql.EntityFrameworkCore.PostgreSQL",   "9.0.4"       ),
-        new("Microsoft.EntityFrameworkCore.Sqlite",    "9.0.10"      ),
-        new("Dapper",                                  "2.1.66"      ),
-        new("ClosedXML",                               "0.105.0"     ),
-        new("WebSerializer",                           "1.3.0"       ),
-        new("System.DirectoryServices",                "9.0.10"      ),
-        new("System.DirectoryServices.Protocols",      "9.0.10"      ),
-        new("NuGet.Protocol",                          "6.14.0"      ),
-        new("MailKit",                                 "4.14.1"      ),
-        new("Docker.DotNet",                           "3.125.15"    ),
+        new("Dummy",   new("0.1.0-preview1")),
     },
 };
 
 return await Paved.ProceedAsync(async () =>
 {
-    // Detection regular expression for package reference directives
-    var detector = new Regex(@"^\s*#\s*r\s+""\s*nuget\s*:\s*(?<package>[a-zA-Z0-9_\-\.]+)(?:,| )\s*(?<version>.+)\s*""");
+    // package sources
+    var config = NuGet.Configuration.Settings.LoadDefaultSettings(default);
+    var sources = NuGet.Configuration.PackageSourceProvider.LoadPackageSources(config).ToArray();
+    var seachers = await sources.ToObservable()
+        .SelectAwait(async (s, c) => await Repository.Factory.GetCoreV3(s).GetResourceAsync<PackageMetadataResource>(c))
+        .ToArrayAsync();
+
+    // find context
+    var cache = new SourceCacheContext();
+    var logger = NullLogger.Instance;
 
     // Dictionary of packages to be updated
-    var versions = settings.Packages.ToDictionary(p => p.Name);
+    var versions = settings.FixedVersions.ToDictionary(p => p.Id, p => (PackageIdentity?)p);
+
+    // Detection regular expression for package reference directives
+    var detector = new Regex(@"^\s*#\s*r\s+""\s*nuget\s*:\s*(?<package>[a-zA-Z0-9_\-\.]+)(?:,| )\s*(?<version>.+)\s*""");
 
     // Search for scripts under the target directory
     foreach (var file in settings.TargetDir.EnumerateFiles("*.csx", SearchOption.AllDirectories))
@@ -68,34 +68,50 @@ return await Paved.ProceedAsync(async () =>
             detected = true;
 
             // Determine if the package is eligible for renewal
-            var pkgName = match.Groups["package"].Value;
-            if (!versions.TryGetValue(pkgName, out var package))
+            var srcName = match.Groups["package"].Value;
+            var srcVer = match.Groups["version"].Value;
+            if (!versions.TryGetValue(srcName, out var identity))
             {
-                WriteLine(Chalk.BrightYellow[$"  Skip: {pkgName} - Not update target"]);
-                continue;
+                // Interpret the original version to determine if it is a pre-release.
+                var usePrerelease = NuGetVersion.TryParse(srcVer, out var ver) && ver.IsPrerelease;
+
+                // Retrieve the latest package version.
+                var metadatas = await seachers.ToObservable()
+                    .SelectAwait(async (r, c) => await r.GetMetadataAsync(srcName, includePrerelease: usePrerelease, includeUnlisted: false, cache, logger, c))
+                    .SelectMany(vers => vers.ToObservable())
+                    .ToArrayAsync();
+                var latest = metadatas.MaxBy(m => m.Identity.Version, VersionComparer.Default);
+                WriteLine((latest == null ? Chalk.Yellow : Chalk.Gray)[$"  Info: {srcName} - Retrieve the latest version information: {(latest == null ? "Failed" : "Success")}"]);
+
+                // Set as the target version for update
+                identity = latest?.Identity;
+
+                // Added to package dictionary
+                versions.Add(srcName, identity);
             }
 
-            // Parse the version number.
-            if (!SemanticVersion.TryParse(match.Groups["version"].Value, out var pkgVer))
+            // Evaluate acquisition result
+            if (identity == null)
             {
-                WriteLine(Chalk.Yellow[$"  Skip: Unable to recognize version number"]);
+                WriteLine(Chalk.Yellow[$"  Skip: Unable to retrieve the package version"]);
                 continue;
             }
 
             // Determine if the package version needs to be updated.
-            if (pkgVer == package.SemanticVersion)
+            var latestVer = identity.Version.ToFullString();
+            if (srcVer == latestVer)
             {
-                WriteLine(Chalk.Gray[$"  Skip: {pkgName} - Already in version"]);
+                WriteLine(Chalk.Gray[$"  Skip: {srcName} - Already in version"]);
                 continue;
             }
 
             // Create a replacement line for the reference directive
-            var newLine = @$"#r ""nuget: {pkgName}, {package.Version}""";
+            var newLine = @$"#r ""nuget: {srcName}, {latestVer}""";
             lines[i] = newLine;
 
             // set a flag that there is an update
             updated = true;
-            WriteLine(Chalk.Green[$"  Update: {pkgName} {pkgVer.Original} -> {package.Version}"]);
+            WriteLine(Chalk.Green[$"  Update: {srcName} {srcVer} -> {latestVer}"]);
         }
 
         // Write back to file if updates are needed
@@ -110,9 +126,3 @@ return await Paved.ProceedAsync(async () =>
     }
 
 });
-
-// Package version information data type
-record PackageVersion(string Name, string Version)
-{
-    public SemanticVersion SemanticVersion { get; } = SemanticVersion.Parse(Version);
-}

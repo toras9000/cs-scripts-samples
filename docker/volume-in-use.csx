@@ -1,6 +1,6 @@
 #!/usr/bin/env -S dotnet-script
 #r "nuget: Docker.DotNet, 3.125.15"
-#r "nuget: Lestaly.General, 0.106.0"
+#r "nuget: Lestaly.General, 0.108.0"
 #nullable enable
 using Docker.DotNet;
 using Lestaly;

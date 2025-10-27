@@ -1,7 +1,7 @@
 #r "nuget: System.DirectoryServices, 9.0.10"
 #r "nuget: System.DirectoryServices.Protocols, 9.0.10"
-#r "nuget: Lestaly.General, 0.106.0"
-#r "nuget: Lestaly.Ldap, 0.101.0"
+#r "nuget: Lestaly.General, 0.108.0"
+#r "nuget: Lestaly.Ldap, 0.102.0"
 #r "nuget: Kokuban, 0.2.0"
 #nullable enable
 using System.DirectoryServices.Protocols;
