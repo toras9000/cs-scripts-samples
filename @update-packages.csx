@@ -93,7 +93,7 @@ return await Paved.ProceedAsync(async () =>
             // Evaluate acquisition result
             if (identity == null)
             {
-                WriteLine(Chalk.Yellow[$"  Skip: Unable to retrieve the package version"]);
+                WriteLine(Chalk.Yellow[$"  Skip: {srcName} - Unable to retrieve the package version"]);
                 continue;
             }
 
