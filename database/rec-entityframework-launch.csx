@@ -1,4 +1,4 @@
-#r "nuget: Lestaly.General, 0.108.0"
+#r "nuget: Lestaly.General, 0.109.0"
 #nullable enable
 using Lestaly;
 using Lestaly.Cx;

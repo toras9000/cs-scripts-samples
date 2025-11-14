@@ -1,5 +1,5 @@
-#r "nuget: Lestaly.General, 0.108.0"
-#r "nuget: Lestaly.Excel, 0.100.0"
+#r "nuget: Lestaly.General, 0.109.0"
+#r "nuget: Lestaly.Excel, 0.101.0"
 #nullable enable
 using System.Reflection;
 using System.Runtime.Intrinsics.Arm;

@@ -1,8 +1,8 @@
 #!/usr/bin/env dotnet-script
-#r "nuget: NuGet.Protocol, 6.14.0"
+#r "nuget: NuGet.Protocol, 7.0.0"
 #r "nuget: R3, 1.3.0"
 #r "nuget: Kokuban, 0.2.0"
-#r "nuget: Lestaly.General, 0.108.0"
+#r "nuget: Lestaly.General, 0.109.0"
 #nullable enable
 using System.Text.RegularExpressions;
 using Kokuban;
