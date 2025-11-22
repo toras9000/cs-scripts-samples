@@ -1,4 +1,4 @@
-#r "nuget: Lestaly.General, 0.109.0"
+#r "nuget: Lestaly.General, 0.112.0"
 #r "nuget: Microsoft.EntityFrameworkCore.Relational, 10.0.0"
 #r "nuget: Microsoft.EntityFrameworkCore.Sqlite, 10.0.0"
 #r "nuget: Npgsql.EntityFrameworkCore.PostgreSQL, 10.0.0-rc.2"

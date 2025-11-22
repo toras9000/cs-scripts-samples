@@ -1,5 +1,5 @@
 #r "nuget: AngleSharp, 1.4.0"
-#r "nuget: Lestaly.General, 0.109.0"
+#r "nuget: Lestaly.General, 0.112.0"
 #nullable enable
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;

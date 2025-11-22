@@ -2,7 +2,7 @@
 #r "nuget: NuGet.Protocol, 7.0.0"
 #r "nuget: R3, 1.3.0"
 #r "nuget: Kokuban, 0.2.0"
-#r "nuget: Lestaly.General, 0.109.0"
+#r "nuget: Lestaly.General, 0.112.0"
 #nullable enable
 using System.Text.RegularExpressions;
 using Kokuban;

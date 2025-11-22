@@ -1,5 +1,5 @@
 #r "sdk:Microsoft.NET.Sdk.Web"
-#r "nuget: Lestaly.General, 0.109.0"
+#r "nuget: Lestaly.General, 0.112.0"
 #nullable enable
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -34,8 +34,7 @@ return await Paved.RunAsync(async () =>
     // Set output encoding to UTF8.
     using var outenc = ConsoleWig.OutputEncodingPeriod(Encoding.UTF8);
 
-    // Display URL to set up in BookStack.
-    // This will be by the hostname added to the included docker container.
+    // Server information
     var serverAddr = $"http://{settings.ServerName}:{settings.PortNumber}";
     Console.WriteLine($"Server address:");
     Console.WriteLine($"    {serverAddr}");

@@ -1,4 +1,4 @@
-#r "nuget: Lestaly.General, 0.109.0"
+#r "nuget: Lestaly.General, 0.112.0"
 #r "nuget: System.Data.SQLite.Core, 1.0.119"
 #r "nuget: Dapper, 2.1.66"
 #r "nuget: Kokuban, 0.2.0"

@@ -1,4 +1,4 @@
-#r "nuget: Lestaly.General, 0.109.0"
+#r "nuget: Lestaly.General, 0.112.0"
 #r "nuget: Lestaly.Excel, 0.101.0"
 #nullable enable
 using System.Reflection;

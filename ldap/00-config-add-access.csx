@@ -1,4 +1,4 @@
-#r "nuget: Lestaly.General, 0.109.0"
+#r "nuget: Lestaly.General, 0.112.0"
 #r "nuget: Kokuban, 0.2.0"
 #load ".text-helper.csx"
 #nullable enable

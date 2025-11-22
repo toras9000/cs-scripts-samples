@@ -1,5 +1,5 @@
 #r "nuget: Microsoft.Playwright, 1.56.0"
-#r "nuget: Lestaly.General, 0.109.0"
+#r "nuget: Lestaly.General, 0.112.0"
 #nullable enable
 using Microsoft.Playwright;
 using Lestaly;
